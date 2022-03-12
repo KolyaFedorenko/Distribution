@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class TasksFragment extends Fragment {
+public class AddTaskFragment extends Fragment {
 
     EditText editTaskName, editTaskDescription, editExpirationDate, editExpirationTime;
     Button buttonAddTask;
@@ -30,7 +30,7 @@ public class TasksFragment extends Fragment {
     String[] workers = {"Worker 1", "Worker 2", "Worker 3"};
     String DISTRIBUTION_KEY = "Distribution";
 
-    public TasksFragment() {
+    public AddTaskFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +43,7 @@ public class TasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_tasks, container, false);
+        return inflater.inflate(R.layout.fragment_add_task, container, false);
     }
 
     @Override

@@ -2,12 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/userTasks"
-        android:title="Tasks"
+        android:id="@+id/addTask"
+        android:title="Add task"
         android:icon="@drawable/ic_baseline_account"/>
+
+    <item
+        android:id="@+id/taskList"
+        android:title="Task list"
+        android:icon="@drawable/ic_baseline_assignment"/>
+
     <item
         android:id="@+id/settings"
-        android:title="Profile"
+        android:title="Settings"
         android:icon="@drawable/ic_baseline_settings"/>
 
 </menu>

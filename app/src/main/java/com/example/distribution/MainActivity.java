@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //FirebaseApp.initializeApp(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new TasksFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new AddTaskFragment()).commit();
     }
 }
