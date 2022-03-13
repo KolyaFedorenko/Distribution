@@ -10,12 +10,12 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener{
+public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener, TaskListFragment.OnFragmentSendTaskDetailsListener{
 
     private BottomNavigationView bottomNavigationView;
     Fragment activeFragment;
 
-    Fragment addTaskFragment;
+    Fragment addTaskFragment, taskDetailsFragment;
     Fragment settingsFragment = new SettingsFragment();
     Fragment taskListFragment = new TaskListFragment();
 
@@ -40,7 +40,10 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             {
                 case R.id.taskList:
                     if (activeFragment.equals(addTaskFragment)){
-                        replaceAddTaskFragment(taskListFragment);
+                        replaceFragment(addTaskFragment, taskListFragment);
+                    }
+                    if (activeFragment.equals(taskDetailsFragment)){
+                        replaceFragment(taskDetailsFragment, taskListFragment);
                     }
                     else {
                         getSupportFragmentManager().beginTransaction().hide(activeFragment).show(taskListFragment).commit();
@@ -50,7 +53,10 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
                 case R.id.settings:
                     if (activeFragment.equals(addTaskFragment)){
-                        replaceAddTaskFragment(settingsFragment);
+                        replaceFragment(addTaskFragment, settingsFragment);
+                    }
+                    if (activeFragment.equals(taskDetailsFragment)){
+                        replaceFragment(taskDetailsFragment, settingsFragment);
                     }
                     else {
                         getSupportFragmentManager().beginTransaction().hide(activeFragment).show(settingsFragment).commit();
@@ -72,11 +78,18 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     @Override
     public void onCloseFragment() {
-        replaceAddTaskFragment(taskListFragment);
+        replaceFragment(addTaskFragment, taskListFragment);
     }
 
-    public void replaceAddTaskFragment(Fragment replacing){
-        getSupportFragmentManager().beginTransaction().remove(addTaskFragment).show(replacing).commit();
+    @Override
+    public void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
+        taskDetailsFragment = new TaskDetailtsFragment(taskName, taskDescription, taskExpDate, taskExpTime, taskWorker);
+        getSupportFragmentManager().beginTransaction().add(R.id.container, taskDetailsFragment, "taskDetailsFragment").hide(activeFragment).commit();
+        activeFragment = taskDetailsFragment;
+    }
+
+    public void replaceFragment(Fragment replaced, Fragment replacing){
+        getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
         activeFragment = replacing;
     }
 }

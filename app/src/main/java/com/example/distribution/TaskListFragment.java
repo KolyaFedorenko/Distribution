@@ -31,7 +31,12 @@ public class TaskListFragment extends Fragment {
         void onSendData();
     }
 
+    interface OnFragmentSendTaskDetailsListener{
+        void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker);
+    }
+
     private OnFragmentSendDataListener fragmentSendDataListener;
+    private OnFragmentSendTaskDetailsListener fragmentSendTaskDetailsListener;
 
     ListView listTasks;
     Button buttonAddNewTask;
@@ -54,6 +59,7 @@ public class TaskListFragment extends Fragment {
         super.onAttach(context);
         try {
             fragmentSendDataListener = (OnFragmentSendDataListener) context;
+            fragmentSendTaskDetailsListener = (OnFragmentSendTaskDetailsListener) context;
         }
         catch (ClassCastException e){
             Toast.makeText(getActivity(), "Interface error", Toast.LENGTH_LONG).show();
@@ -92,7 +98,7 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Distribution distribution = (Distribution)parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), "Task: " + distribution.getTaskName(), Toast.LENGTH_SHORT).show();
+                fragmentSendTaskDetailsListener.onSendTaskDetails(distribution.taskName, distribution.taskDescription, distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker);
             }
         };
         listTasks.setOnItemClickListener(itemClickListener);
@@ -112,7 +118,7 @@ public class TaskListFragment extends Fragment {
                 if(distributions.size() > 0) distributions.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Distribution distribution = dataSnapshot.getValue(Distribution.class);
-                    distributions.add(new Distribution(distribution.taskName, distribution.taskDescription, "Until " + distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker));
+                    distributions.add(new Distribution(distribution.taskName, distribution.taskDescription, "Until " + distribution.taskExpirationDate, distribution.taskExpirationTime, "To: " + distribution.taskWorker));
                 }
                 adapter.notifyDataSetChanged();
             }
