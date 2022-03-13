@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,28 +27,56 @@ import java.util.List;
 
 public class TaskListFragment extends Fragment {
 
+    interface OnFragmentSendDataListener{
+        void onSendData();
+    }
+
+    private OnFragmentSendDataListener fragmentSendDataListener;
+
     ListView listTasks;
+    Button buttonAddNewTask;
     ArrayList<Distribution> distributions;
     DistributionAdapter adapter;
 
     DatabaseReference databaseReference;
     String DISTRIBUTION_KEY = "Distribution";
 
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+    String userRole;
+
     public TaskListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragmentSendDataListener = (OnFragmentSendDataListener) context;
+        }
+        catch (ClassCastException e){
+            Toast.makeText(getActivity(), "Interface error", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
+        getUserRole();
         getData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_task_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+        buttonAddNewTask = view.findViewById(R.id.buttonAddNewTask);
+        if (userRole.equals("Worker")){
+            buttonAddNewTask.setVisibility(View.INVISIBLE);
+        }
+        return view;
     }
 
     @Override
@@ -66,6 +96,13 @@ public class TaskListFragment extends Fragment {
             }
         };
         listTasks.setOnItemClickListener(itemClickListener);
+
+        buttonAddNewTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSendDataListener.onSendData();
+            }
+        });
     }
 
     private void getData(){
@@ -75,7 +112,7 @@ public class TaskListFragment extends Fragment {
                 if(distributions.size() > 0) distributions.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Distribution distribution = dataSnapshot.getValue(Distribution.class);
-                    distributions.add(new Distribution(distribution.taskName, distribution.taskDescription));
+                    distributions.add(new Distribution(distribution.taskName, distribution.taskDescription, "Until " + distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker));
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -85,6 +122,15 @@ public class TaskListFragment extends Fragment {
 
             }
         };
-        databaseReference.addValueEventListener(valueEventListener);
+        if (userRole.equals("Worker")){
+            databaseReference.orderByChild("taskWorker").equalTo("Worker 1").addValueEventListener(valueEventListener);
+        }
+        else{
+            databaseReference.addValueEventListener(valueEventListener);
+        }
+    }
+
+    private void getUserRole(){
+        userRole = getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
     }
 }

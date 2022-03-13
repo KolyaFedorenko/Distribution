@@ -27,10 +27,16 @@ public class DistributionAdapter extends ArrayAdapter<Distribution> {
 
         TextView taskNameView = view.findViewById(R.id.tlTaskName);
         TextView taskDescriptionView = view.findViewById(R.id.tlTaskDescription);
+        TextView taskWorkerView = view.findViewById(R.id.tlTaskWorker);
+        TextView taskDateView = view.findViewById(R.id.tlTaskExpDate);
+        TextView taskTimeView = view.findViewById(R.id.tlTaskExpTime);
 
         Distribution distribution = distributions.get(position);
         taskNameView.setText(distribution.getTaskName());
         taskDescriptionView.setText(distribution.getTaskDescription());
+        taskWorkerView.setText(distribution.getTaskWorker());
+        taskDateView.setText(distribution.getTaskExpirationDate());
+        taskTimeView.setText(distribution.getTaskExpirationTime());
 
         return view;
     }

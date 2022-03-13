@@ -1,60 +1,48 @@
 package com.example.distribution;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
-    Fragment activeFragment;
-
-    Fragment addTaskFragment = new AddTaskFragment();
-    Fragment settingsFragment = new SettingsFragment();
-    Fragment taskListFragment = new TaskListFragment();
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button buttonSignAsAdmin = findViewById(R.id.buttonSignAsAdmin);
+        Button buttonSignAsWorkerOne = findViewById(R.id.buttonSignAsWorkerOne);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationMethod);
+        buttonSignAsAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
+                setRole("Manager");
+            }
+        });
 
-        getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").hide(taskListFragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").commit();
-        activeFragment = addTaskFragment;
+        buttonSignAsWorkerOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
+                setRole("Worker");
+            }
+        });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavigationMethod = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-            switch (menuItem.getItemId())
-            {
-                case R.id.addTask:
-                    getSupportFragmentManager().beginTransaction().hide(activeFragment).show(addTaskFragment).commit();
-                    activeFragment = addTaskFragment;
-                    break;
-
-                case R.id.taskList:
-                    getSupportFragmentManager().beginTransaction().hide(activeFragment).show(taskListFragment).commit();
-                    activeFragment = taskListFragment;
-                    break;
-
-                case R.id.settings:
-                    getSupportFragmentManager().beginTransaction().hide(activeFragment).show(settingsFragment).commit();
-                    activeFragment = settingsFragment;
-                    break;
-            }
-
-            return true;
-        }
-    };
+    private void setRole(String role){
+        sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREF_ROLE, role).apply();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AddTaskFragment extends Fragment {
 
+    interface OnFragmentCloseListener{
+        void onCloseFragment();
+    }
+
+    private OnFragmentCloseListener fragmentCloseListener;
+
     EditText editTaskName, editTaskDescription, editExpirationDate, editExpirationTime;
     Button buttonAddTask;
     Spinner spinnerTaskTo;
@@ -32,6 +39,17 @@ public class AddTaskFragment extends Fragment {
 
     public AddTaskFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragmentCloseListener = (OnFragmentCloseListener) context;
+        }
+        catch (ClassCastException e){
+            Toast.makeText(getActivity(), "Interface error", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -75,6 +93,7 @@ public class AddTaskFragment extends Fragment {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
                     databaseReference.push().setValue(distribution);
                     showToast("Successfully added");
+                    fragmentCloseListener.onCloseFragment();
                 }
                 else{
                     showToast("One or more fields is empty");

@@ -16,11 +16,6 @@ public class Distribution {
         this.taskWorker = worker;
     }
 
-    public Distribution(String taskName, String taskDescription) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-    }
-
     public Distribution(){}
 
 
