@@ -31,7 +31,7 @@ public class AddTaskFragment extends Fragment {
     Button buttonAddTask;
     Spinner spinnerTaskTo;
     String taskName, taskDesc, taskExpDate, taskExpTime, taskTo;
-    String oldTaskName, oldTaskDesc, olfTaskExpDate, oldTaskExpTime;
+    String oldTaskName;
     boolean filled = false;
 
     DatabaseReference databaseReference;
@@ -72,6 +72,9 @@ public class AddTaskFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_task, container, false);
 
+        spinnerTaskTo = view.findViewById(R.id.spinnerTaskTo);
+        buttonAddTask = view.findViewById(R.id.buttonAddTask);
+
         editTaskName = view.findViewById(R.id.editTaskName);
         editTaskDescription = view.findViewById(R.id.editTaskDescription);
         editExpirationDate = view.findViewById(R.id.editExpirationDate);
@@ -83,10 +86,11 @@ public class AddTaskFragment extends Fragment {
             editExpirationDate.setText(taskExpDate);
             editExpirationTime.setText(taskExpTime);
 
-            oldTaskName = taskName;
-            oldTaskDesc = taskDesc;
-            olfTaskExpDate = taskExpDate;
-            oldTaskExpTime = taskExpTime;
+            oldTaskName = editTaskName.getText().toString();
+
+            editTaskName.setEnabled(false);
+            buttonAddTask.setBackground(getActivity().getDrawable(R.drawable.rounded_secondary_action_item));
+            buttonAddTask.setText("Edit task");
         }
 
         return view;
@@ -95,9 +99,6 @@ public class AddTaskFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        spinnerTaskTo = view.findViewById(R.id.spinnerTaskTo);
-        buttonAddTask = view.findViewById(R.id.buttonAddTask);
 
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
 
@@ -115,11 +116,11 @@ public class AddTaskFragment extends Fragment {
                 taskTo = spinnerTaskTo.getSelectedItem().toString();
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals(""))) {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
-                    databaseReference.push().setValue(distribution);
+                    databaseReference.child(taskName).setValue(distribution);
                     showToast("Successfully added");
                     fragmentCloseListener.onCloseAddTaskFragment();
                 }
-                else{
+                else {
                     showToast("One or more fields is empty");
                 }
             }
