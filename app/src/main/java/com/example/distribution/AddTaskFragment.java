@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddTaskFragment extends Fragment {
 
     interface OnFragmentCloseListener{
-        void onCloseFragment();
+        void onCloseAddTaskFragment();
     }
 
     private OnFragmentCloseListener fragmentCloseListener;
@@ -31,6 +31,8 @@ public class AddTaskFragment extends Fragment {
     Button buttonAddTask;
     Spinner spinnerTaskTo;
     String taskName, taskDesc, taskExpDate, taskExpTime, taskTo;
+    String oldTaskName, oldTaskDesc, olfTaskExpDate, oldTaskExpTime;
+    boolean filled = false;
 
     DatabaseReference databaseReference;
 
@@ -39,6 +41,14 @@ public class AddTaskFragment extends Fragment {
 
     public AddTaskFragment() {
         // Required empty public constructor
+    }
+
+    public AddTaskFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime){
+        this.taskName = taskName;
+        this.taskDesc = taskDescription;
+        this.taskExpDate = taskExpDate;
+        this.taskExpTime = taskExpTime;
+        filled = true;
     }
 
     @Override
@@ -60,8 +70,26 @@ public class AddTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_add_task, container, false);
 
-        return inflater.inflate(R.layout.fragment_add_task, container, false);
+        editTaskName = view.findViewById(R.id.editTaskName);
+        editTaskDescription = view.findViewById(R.id.editTaskDescription);
+        editExpirationDate = view.findViewById(R.id.editExpirationDate);
+        editExpirationTime = view.findViewById(R.id.editExpirationTime);
+
+        if (filled){
+            editTaskName.setText(taskName);
+            editTaskDescription.setText(taskDesc);
+            editExpirationDate.setText(taskExpDate);
+            editExpirationTime.setText(taskExpTime);
+
+            oldTaskName = taskName;
+            oldTaskDesc = taskDesc;
+            olfTaskExpDate = taskExpDate;
+            oldTaskExpTime = taskExpTime;
+        }
+
+        return view;
     }
 
     @Override
@@ -69,10 +97,6 @@ public class AddTaskFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         spinnerTaskTo = view.findViewById(R.id.spinnerTaskTo);
-        editTaskName = view.findViewById(R.id.editTaskName);
-        editTaskDescription = view.findViewById(R.id.editTaskDescription);
-        editExpirationDate = view.findViewById(R.id.editExpirationDate);
-        editExpirationTime = view.findViewById(R.id.editExpirationTime);
         buttonAddTask = view.findViewById(R.id.buttonAddTask);
 
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
@@ -89,11 +113,11 @@ public class AddTaskFragment extends Fragment {
                 taskExpDate = editExpirationDate.getText().toString();
                 taskExpTime = editExpirationTime.getText().toString();
                 taskTo = spinnerTaskTo.getSelectedItem().toString();
-                if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals(""))){
+                if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals(""))) {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
                     databaseReference.push().setValue(distribution);
                     showToast("Successfully added");
-                    fragmentCloseListener.onCloseFragment();
+                    fragmentCloseListener.onCloseAddTaskFragment();
                 }
                 else{
                     showToast("One or more fields is empty");

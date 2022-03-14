@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener, TaskListFragment.OnFragmentSendTaskDetailsListener{
+public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener, TaskDetailtsFragment.OnFragmentSendDetailsToEdit{
 
     private BottomNavigationView bottomNavigationView;
     Fragment activeFragment;
@@ -70,14 +70,14 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     };
 
     @Override
-    public void onSendData() {
+    public void onAddNewTask() {
         addTaskFragment = new AddTaskFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
         activeFragment = addTaskFragment;
     }
 
     @Override
-    public void onCloseFragment() {
+    public void onCloseAddTaskFragment() {
         replaceFragment(addTaskFragment, taskListFragment);
     }
 
@@ -91,5 +91,12 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     public void replaceFragment(Fragment replaced, Fragment replacing){
         getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
         activeFragment = replacing;
+    }
+
+    @Override
+    public void OnSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
+        addTaskFragment = new AddTaskFragment(taskName, taskDescription, taskExpDate, taskExpTime);
+        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
+        activeFragment = addTaskFragment;
     }
 }

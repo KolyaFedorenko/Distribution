@@ -28,15 +28,11 @@ import java.util.List;
 public class TaskListFragment extends Fragment {
 
     interface OnFragmentSendDataListener{
-        void onSendData();
-    }
-
-    interface OnFragmentSendTaskDetailsListener{
+        void onAddNewTask();
         void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker);
     }
 
     private OnFragmentSendDataListener fragmentSendDataListener;
-    private OnFragmentSendTaskDetailsListener fragmentSendTaskDetailsListener;
 
     ListView listTasks;
     Button buttonAddNewTask;
@@ -59,7 +55,6 @@ public class TaskListFragment extends Fragment {
         super.onAttach(context);
         try {
             fragmentSendDataListener = (OnFragmentSendDataListener) context;
-            fragmentSendTaskDetailsListener = (OnFragmentSendTaskDetailsListener) context;
         }
         catch (ClassCastException e){
             Toast.makeText(getActivity(), "Interface error", Toast.LENGTH_LONG).show();
@@ -98,7 +93,7 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Distribution distribution = (Distribution)parent.getItemAtPosition(position);
-                fragmentSendTaskDetailsListener.onSendTaskDetails(distribution.taskName, distribution.taskDescription, distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker);
+                fragmentSendDataListener.onSendTaskDetails(distribution.taskName, distribution.taskDescription, distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker);
             }
         };
         listTasks.setOnItemClickListener(itemClickListener);
@@ -106,7 +101,7 @@ public class TaskListFragment extends Fragment {
         buttonAddNewTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentSendDataListener.onSendData();
+                fragmentSendDataListener.onAddNewTask();
             }
         });
     }

@@ -1,18 +1,40 @@
 package com.example.distribution;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TaskDetailtsFragment extends Fragment {
 
+    interface OnFragmentSendDetailsToEdit{
+        void OnSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime);
+    }
+
+    private OnFragmentSendDetailsToEdit fragmentSendDetailsToEdit;
+
     String taskName, taskDescription, taskExpDate, taskExpTime, taskWorker;
     TextView textTaskName, textTaskDescription, textTaskExpDate, textTaskExpTime, textTaskWorker;
+    Button buttonTaskSeen, buttonTaskCompleted, buttonEditTask, buttonCloseTask;
+
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+    String userRole;
+
+    DatabaseReference databaseReference;
+    String DISTRIBUTION_KEY = "Distribution";
 
     public TaskDetailtsFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
         this.taskName = taskName;
@@ -23,9 +45,20 @@ public class TaskDetailtsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragmentSendDetailsToEdit = (OnFragmentSendDetailsToEdit) context;
+        }
+        catch (ClassCastException e){
+            Toast.makeText(getActivity(), "Interface error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getUserRole();
     }
 
     @Override
@@ -46,5 +79,43 @@ public class TaskDetailtsFragment extends Fragment {
         textTaskWorker.setText(taskWorker);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        buttonTaskSeen = view.findViewById(R.id.buttonTaskSeen);
+        buttonTaskCompleted = view.findViewById(R.id.buttonTaskCompleted);
+        buttonEditTask = view.findViewById(R.id.buttonEditTask);
+        buttonCloseTask = view.findViewById(R.id.buttonCloseTask);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
+
+        if (!userRole.equals("Worker")){
+            buttonTaskSeen.setVisibility(View.GONE);
+            buttonTaskCompleted.setVisibility(View.GONE);
+            buttonEditTask.setVisibility(View.VISIBLE);
+            buttonCloseTask.setVisibility(View.VISIBLE);
+        }
+
+        buttonEditTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSendDetailsToEdit.OnSendDetailsToEdit(taskName, taskDescription, taskExpDate, taskExpTime);
+            }
+        });
+
+        buttonTaskCompleted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+    }
+
+    private void getUserRole(){
+        userRole = getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
     }
 }
