@@ -20,7 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class TaskDetailtsFragment extends Fragment {
 
     interface OnFragmentSendDetailsToEdit{
-        void OnSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime);
+        void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime);
+        void onCloseTaskDetailsFragment();
     }
 
     private OnFragmentSendDetailsToEdit fragmentSendDetailsToEdit;
@@ -102,20 +103,43 @@ public class TaskDetailtsFragment extends Fragment {
         buttonEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentSendDetailsToEdit.OnSendDetailsToEdit(taskName, taskDescription, taskExpDate, taskExpTime);
+                fragmentSendDetailsToEdit.onSendDetailsToEdit(taskName, taskDescription, taskExpDate, taskExpTime);
+            }
+        });
+
+        buttonCloseTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeTask("Task closed");
             }
         });
 
         buttonTaskCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                removeTask("Task marked as completed");
             }
         });
 
+        buttonTaskSeen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSendDetailsToEdit.onCloseTaskDetailsFragment();
+            }
+        });
     }
 
     private void getUserRole(){
         userRole = getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
+    }
+
+    private void removeTask(String toastToShow){
+        databaseReference.child(taskName).removeValue();
+        showToast(toastToShow);
+        fragmentSendDetailsToEdit.onCloseTaskDetailsFragment();
+    }
+
+    private void showToast(String text){
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 }

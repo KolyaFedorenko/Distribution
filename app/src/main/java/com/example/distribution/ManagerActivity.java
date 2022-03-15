@@ -94,9 +94,14 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     }
 
     @Override
-    public void OnSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
+    public void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
         addTaskFragment = new AddTaskFragment(taskName, taskDescription, taskExpDate, taskExpTime);
         getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
         activeFragment = addTaskFragment;
+    }
+
+    @Override
+    public void onCloseTaskDetailsFragment() {
+        replaceFragment(taskDetailsFragment, taskListFragment);
     }
 }
