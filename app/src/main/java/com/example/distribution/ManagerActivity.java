@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener, TaskDetailtsFragment.OnFragmentSendDetailsToEdit{
+public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener, AddTaskFragment.OnFragmentCloseListener, TaskDetailtsFragment.OnFragmentSendDetailsToEdit, SettingsFragment.OnFragmentSignOut{
 
     private BottomNavigationView bottomNavigationView;
     Fragment activeFragment;
@@ -103,5 +103,11 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     @Override
     public void onCloseTaskDetailsFragment() {
         replaceFragment(taskDetailsFragment, taskListFragment);
+    }
+
+    @Override
+    public void onSignOut() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 }
