@@ -20,6 +20,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private static final String PREFS_FILE = "Account";
     private static final String PREF_ROLE = "Worker";
     private static final boolean PREF_SIGNED_IN = false;
+    private static final String PREF_WORKER_NAME = "";
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -126,13 +127,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     }
 
     @Override
-    public void onSignIn(String role) {
+    public void onSignIn(String role, String name) {
         sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString(PREF_ROLE, role).apply();
+        editor.putString(PREF_ROLE, role);
         editor.putBoolean(String.valueOf(PREF_SIGNED_IN), true);
+        editor.putString(PREF_WORKER_NAME, name);
         editor.apply();
         bottomNavigationView.setVisibility(View.VISIBLE);
+        bottomNavigationView.setSelectedItemId(R.id.taskList);
         taskListFragment = new TaskListFragment();
         settingsFragment = new SettingsFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();

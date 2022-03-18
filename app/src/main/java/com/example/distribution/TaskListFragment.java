@@ -44,6 +44,7 @@ public class TaskListFragment extends Fragment {
 
     private static final String PREFS_FILE = "Account";
     private static final String PREF_ROLE = "Worker";
+    private static final String PREF_WORKER_NAME = "";
     String userRole;
 
     public TaskListFragment() {
@@ -124,7 +125,7 @@ public class TaskListFragment extends Fragment {
             }
         };
         if (userRole.equals("Worker")){
-            databaseReference.orderByChild("taskWorker").equalTo("Worker 1").addValueEventListener(valueEventListener);
+            databaseReference.orderByChild("taskWorker").equalTo(getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_WORKER_NAME, "")).addValueEventListener(valueEventListener);
         }
         else{
             databaseReference.addValueEventListener(valueEventListener);

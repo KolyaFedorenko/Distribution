@@ -73,8 +73,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinnerTaskTo"
+    <ListView
+        android:id="@+id/listTaskTo"
         android:layout_width="320dp"
         android:layout_height="56dp"
         android:layout_marginTop="344dp"
@@ -82,7 +82,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scrollbars="none"
+        android:divider="@null"/>
 
     <Button
         android:id="@+id/buttonAddTask"

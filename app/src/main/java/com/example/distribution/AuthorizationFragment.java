@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class AuthorizationFragment extends Fragment {
 
     interface OnFragmentSignIn{
-        void onSignIn(String role);
+        void onSignIn(String role, String name);
     }
 
     private OnFragmentSignIn fragmentSignIn;
@@ -79,7 +79,7 @@ public class AuthorizationFragment extends Fragment {
                     }
                     if (login.equals(receivedLogin) && password.equals(receivedPassword)){
                         showToast("You have been signed in!");
-                        fragmentSignIn.onSignIn(receivedRole);
+                        fragmentSignIn.onSignIn(receivedRole, receivedLogin);
                     }
                 }
                 else {
