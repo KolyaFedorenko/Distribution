@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  res/drawable/rounded_edittext.xml -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:state_pressed="true">
         <shape>
             <gradient
@@ -20,8 +18,9 @@
     <item>
         <shape>
             <gradient
-                android:gradientRadius="200dp"
-                android:endColor="#FF8686"
+                android:gradientRadius="300dp"
+                android:endColor="#BE86FF"
+                android:centerColor="#FFA372"
                 android:startColor="#FFFC61"
                 android:type="radial" />
             <corners
@@ -31,5 +30,4 @@
                 android:topRightRadius="20dp"/>
         </shape>
     </item>
-
 </selector>
