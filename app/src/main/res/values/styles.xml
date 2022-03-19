@@ -11,4 +11,8 @@
         <item name="android:textColorHint">@color/black</item>
     </style>
 
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#000000</item>
+    </style>
+
 </resources>

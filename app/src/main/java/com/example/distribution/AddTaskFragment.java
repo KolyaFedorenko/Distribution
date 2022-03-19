@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddTaskFragment extends Fragment {
 
@@ -34,12 +38,16 @@ public class AddTaskFragment extends Fragment {
 
     private OnFragmentCloseListener fragmentCloseListener;
 
-    EditText editTaskName, editTaskDescription, editExpirationDate, editExpirationTime;
+    EditText editTaskName, editTaskDescription, editExpirationTime;
+    TextView textExpirationDate;
     Button buttonAddTask;
     ListView listTaskTo;
     String taskName, taskDesc, taskExpDate, taskExpTime, taskTo;
     String oldTaskName;
     boolean filled = false;
+
+    final Calendar calendar = Calendar.getInstance();
+    String day, month, year;
 
     DatabaseReference databaseReference, databaseReferenceUsers;
 
@@ -73,6 +81,7 @@ public class AddTaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getDateToday();
     }
 
     @Override
@@ -85,13 +94,13 @@ public class AddTaskFragment extends Fragment {
 
         editTaskName = view.findViewById(R.id.editTaskName);
         editTaskDescription = view.findViewById(R.id.editTaskDescription);
-        editExpirationDate = view.findViewById(R.id.editExpirationDate);
+        textExpirationDate = view.findViewById(R.id.textExpirationDate);
         editExpirationTime = view.findViewById(R.id.editExpirationTime);
 
         if (filled){
             editTaskName.setText(taskName);
             editTaskDescription.setText(taskDesc);
-            editExpirationDate.setText(taskExpDate);
+            textExpirationDate.setText(taskExpDate.substring(6));
             editExpirationTime.setText(taskExpTime);
 
             oldTaskName = editTaskName.getText().toString();
@@ -99,6 +108,9 @@ public class AddTaskFragment extends Fragment {
             editTaskName.setEnabled(false);
             buttonAddTask.setBackground(getActivity().getDrawable(R.drawable.rounded_secondary_action_item));
             buttonAddTask.setText("Edit task");
+        }
+        else{
+            textExpirationDate.setText(day + "." + month + "." + year);
         }
 
         return view;
@@ -126,12 +138,28 @@ public class AddTaskFragment extends Fragment {
         };
         listTaskTo.setOnItemClickListener(itemClickListener);
 
+        textExpirationDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        day = Integer.toString(dayOfMonth);
+                        String strMonth = Integer.toString(month + 1);
+                        if (day.length() == 1) day = "0" + day;
+                        if (strMonth.length() == 1) strMonth = "0" + strMonth;
+                        textExpirationDate.setText(day + "." + strMonth + "." + year);
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 taskName = editTaskName.getText().toString();
                 taskDesc = editTaskDescription.getText().toString();
-                taskExpDate = editExpirationDate.getText().toString();
+                taskExpDate = textExpirationDate.getText().toString();
                 taskExpTime = editExpirationTime.getText().toString();
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals("") || taskTo == null)) {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
@@ -168,5 +196,13 @@ public class AddTaskFragment extends Fragment {
             }
         };
         databaseReferenceUsers.orderByChild("role").equalTo("Worker").addValueEventListener(valueEventListener);
+    }
+
+    private void getDateToday(){
+        day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+        month = Integer.toString(calendar.get(Calendar.MONTH) + 1);
+        year = Integer.toString(calendar.get(Calendar.YEAR));
+        if (day.length() == 1) day = "0" + day;
+        if (month.length() == 1) month = "0" + month;
     }
 }

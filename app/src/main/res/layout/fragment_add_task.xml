@@ -23,16 +23,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editExpirationDate"
-        style="@style/EditTextHint"
+    <TextView
+        android:id="@+id/textExpirationDate"
         android:layout_width="320dp"
         android:layout_height="56dp"
         android:layout_marginTop="200dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
-        android:hint="Expiration date"
-        android:inputType="date"
+        android:text="Expiration date"
+        android:textColor="@color/black"
+        android:paddingTop="16dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
