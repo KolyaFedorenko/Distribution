@@ -29,6 +29,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     Fragment addTaskFragment, taskDetailsFragment;
     Fragment settingsFragment = new SettingsFragment();
+    Fragment trackingFragment = new TrackingFragment();
     Fragment taskListFragment = new TaskListFragment();
     Fragment authorizationFragment = new AuthorizationFragment();
 
@@ -48,6 +49,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         else {
             bottomNavigationView.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, trackingFragment, "trackingFragment").hide(trackingFragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
             activeFragment = taskListFragment;
         }
@@ -69,6 +71,19 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
                     else {
                         getSupportFragmentManager().beginTransaction().hide(activeFragment).show(taskListFragment).commit();
                         activeFragment = taskListFragment;
+                    }
+                    break;
+
+                case R.id.taskTracking:
+                    if (activeFragment.equals(addTaskFragment)){
+                        replaceFragment(addTaskFragment, trackingFragment);
+                    }
+                    if (activeFragment.equals(taskDetailsFragment)){
+                        replaceFragment(taskDetailsFragment, trackingFragment);
+                    }
+                    else {
+                        getSupportFragmentManager().beginTransaction().hide(activeFragment).show(trackingFragment).commit();
+                        activeFragment = trackingFragment;
                     }
                     break;
 
@@ -138,7 +153,9 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         bottomNavigationView.setSelectedItemId(R.id.taskList);
         taskListFragment = new TaskListFragment();
         settingsFragment = new SettingsFragment();
+        trackingFragment = new TrackingFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, trackingFragment, "trackingFragment").hide(trackingFragment).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
         replaceFragment(authorizationFragment, taskListFragment);
     }
@@ -149,6 +166,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         editor = sharedPreferences.edit();
         editor.putBoolean(String.valueOf(PREF_SIGNED_IN), false).apply();
         getSupportFragmentManager().beginTransaction().hide(settingsFragment).remove(settingsFragment).commit();
+        getSupportFragmentManager().beginTransaction().hide(trackingFragment).remove(trackingFragment).commit();
         getSupportFragmentManager().beginTransaction().hide(taskListFragment).remove(taskListFragment).commit();
         bottomNavigationView.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().add(R.id.container, authorizationFragment, "authorization").commit();

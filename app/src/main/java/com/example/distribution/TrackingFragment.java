@@ -1,0 +1,92 @@
+package com.example.distribution;
+
+import android.graphics.Color;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.database.collection.LLRBNode;
+
+import java.util.ArrayList;
+
+public class TrackingFragment extends Fragment {
+
+    private PieChart pieChartAllStats;
+
+    public TrackingFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_tracking, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        pieChartAllStats = view.findViewById(R.id.pieChartAllStats);
+        setupPieChart();
+        loadPieChartData();
+    }
+
+    private void setupPieChart(){
+        pieChartAllStats.setDrawHoleEnabled(true);
+        pieChartAllStats.setUsePercentValues(true);
+        pieChartAllStats.setEntryLabelTextSize(12);
+        pieChartAllStats.setEntryLabelColor(Color.BLACK);
+        pieChartAllStats.setCenterText("Task stats");
+        pieChartAllStats.setCenterTextSize(18);
+        pieChartAllStats.getDescription().setEnabled(false);
+
+        Legend legend = pieChartAllStats.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setDrawInside(false);
+        legend.setEnabled(true);
+    }
+
+    private void loadPieChartData(){
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(0.25f, "Issued"));
+        entries.add(new PieEntry(0.25f, "Seen"));
+        entries.add(new PieEntry(0.5f, "Completed"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "Legend");
+        dataSet.setColors(new int[]{R.color.colorIssued, R.color.colorSeen, R.color.colorCompleted}, getActivity());
+
+        PieData data = new PieData(dataSet);
+        data.setDrawValues(true);
+        data.setValueFormatter(new PercentFormatter(pieChartAllStats));
+        data.setValueTextSize(12f);
+        data.setValueTextColor(Color.BLACK);
+
+        pieChartAllStats.setData(data);
+        pieChartAllStats.invalidate();
+        pieChartAllStats.animateY(1400, Easing.EaseInOutQuad);
+    }
+}

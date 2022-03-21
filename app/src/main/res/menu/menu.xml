@@ -8,6 +8,11 @@
         android:icon="@drawable/ic_baseline_assignment"/>
 
     <item
+        android:id="@+id/taskTracking"
+        android:title="Task tracking"
+        android:icon="@drawable/ic_baseline_tracking"/>
+
+    <item
         android:id="@+id/settings"
         android:title="Settings"
         android:icon="@drawable/ic_baseline_settings"/>

@@ -14,8 +14,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="140px"
+        android:layout_height="55dp"
+        android:paddingVertical="300dp"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu"
+        app:itemBackground="@drawable/menu_underline_bottom"/>
 
 </RelativeLayout>

@@ -6,4 +6,7 @@
     <color name="black">#000000</color>
     <color name="colorAction">#8AEF54</color>
     <color name="grey">#7A7A7A</color>
+    <color name="colorIssued">#FFE669</color>
+    <color name="colorSeen">#7AFFF4</color>
+    <color name="colorCompleted">#9DFF69</color>
 </resources>
