@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,7 @@ public class TaskListFragment extends Fragment {
 
     private OnFragmentSendDataListener fragmentSendDataListener;
 
+    ProgressBar progressBar;
     ListView listTasks;
     Button buttonAddNewTask;
     ArrayList<Distribution> distributions;
@@ -85,6 +87,7 @@ public class TaskListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        progressBar = view.findViewById(R.id.progressBarTaskList);
         listTasks = view.findViewById(R.id.listTasks);
         distributions = new ArrayList<>();
         adapter = new DistributionAdapter(getActivity(), R.layout.tasks_list, distributions);
@@ -117,6 +120,7 @@ public class TaskListFragment extends Fragment {
                     distributions.add(new Distribution(distribution.taskName, distribution.taskDescription, "Until " + distribution.taskExpirationDate, distribution.taskExpirationTime, "To: " + distribution.taskWorker));
                 }
                 adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
