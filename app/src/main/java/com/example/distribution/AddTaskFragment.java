@@ -25,6 +25,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -49,11 +51,11 @@ public class AddTaskFragment extends Fragment {
     final Calendar calendar = Calendar.getInstance();
     String day, month, year;
 
-    DatabaseReference databaseReference, databaseReferenceUsers;
+    DatabaseReference databaseReference, databaseReferenceUsers, databaseReferenceTracking;
 
     ArrayList<String> users;
     UserAdapter adapter;
-    String DISTRIBUTION_KEY = "Distribution", USERS_KEY = "Users";
+    String DISTRIBUTION_KEY = "Distribution", USERS_KEY = "Users", TRACKING_KEY = "TaskTracking";
 
     public AddTaskFragment() {
         // Required empty public constructor
@@ -122,6 +124,7 @@ public class AddTaskFragment extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
         databaseReferenceUsers = FirebaseDatabase.getInstance().getReference(USERS_KEY);
+        databaseReferenceTracking = FirebaseDatabase.getInstance().getReference(TRACKING_KEY).child("Tracking");
 
         users = new ArrayList<>();
         adapter = new UserAdapter(getActivity(), R.layout.users_list, users);
@@ -164,6 +167,7 @@ public class AddTaskFragment extends Fragment {
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals("") || taskTo == null)) {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
                     databaseReference.child(taskName).setValue(distribution);
+                    if(!filled) editIssuedTasksCount();
                     showToast("Successfully added");
                     fragmentCloseListener.onCloseAddTaskFragment();
                 }
@@ -204,5 +208,24 @@ public class AddTaskFragment extends Fragment {
         year = Integer.toString(calendar.get(Calendar.YEAR));
         if (day.length() == 1) day = "0" + day;
         if (month.length() == 1) month = "0" + month;
+    }
+
+    private void editIssuedTasksCount(){
+        databaseReferenceTracking.child("issued").runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Integer currentValue = currentData.getValue(Integer.class);
+                if (currentValue == null) { currentData.setValue(0); }
+                else { currentData.setValue(currentValue + 1); }
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
+            }
+        });
     }
 }

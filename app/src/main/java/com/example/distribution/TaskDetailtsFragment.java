@@ -14,8 +14,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 public class TaskDetailtsFragment extends Fragment {
 
@@ -34,8 +38,8 @@ public class TaskDetailtsFragment extends Fragment {
     private static final String PREF_ROLE = "Worker";
     String userRole;
 
-    DatabaseReference databaseReference;
-    String DISTRIBUTION_KEY = "Distribution";
+    DatabaseReference databaseReference, databaseReferenceTracking;
+    String DISTRIBUTION_KEY = "Distribution", TRACKING_KEY = "TaskTracking";
 
     public TaskDetailtsFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
         this.taskName = taskName;
@@ -92,6 +96,7 @@ public class TaskDetailtsFragment extends Fragment {
         buttonCloseTask = view.findViewById(R.id.buttonCloseTask);
 
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
+        databaseReferenceTracking = FirebaseDatabase.getInstance().getReference(TRACKING_KEY).child("Tracking");
 
         if (!userRole.equals("Worker")){
             buttonTaskSeen.setVisibility(View.GONE);
@@ -111,6 +116,7 @@ public class TaskDetailtsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 removeTask("Task closed");
+                editTasksCount("Closed");
             }
         });
 
@@ -118,12 +124,14 @@ public class TaskDetailtsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 removeTask("Task marked as completed");
+                editTasksCount("Completed");
             }
         });
 
         buttonTaskSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editTasksCount("Seen");
                 fragmentSendDetailsToEdit.onCloseTaskDetailsFragment();
             }
         });
@@ -141,5 +149,42 @@ public class TaskDetailtsFragment extends Fragment {
 
     private void showToast(String text){
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void editTasksCount(String type){
+        databaseReferenceTracking.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Integer currentValueSeen = currentData.child("seen").getValue(Integer.class);
+                Integer currentValueIssued = currentData.child("issued").getValue(Integer.class);
+                Integer currentValueCompleted = currentData.child("completed").getValue(Integer.class);
+
+                if (currentValueSeen == null) { currentData.child("seen").setValue(0); }
+                if (currentValueIssued == null) { currentData.child("issued").setValue(0); }
+                if (currentValueCompleted == null) { currentData.child("completed").setValue(0); }
+
+                else{
+                    if (type.equals("Seen")){
+                        currentData.child("seen").setValue(currentValueSeen + 1);
+                        currentData.child("issued").setValue(currentValueIssued - 1);
+                    }
+                    if (type.equals("Closed")){
+                        currentData.child("issued").setValue(currentValueIssued - 1);
+                    }
+                    if (type.equals("Completed")){
+                        currentData.child("seen").setValue(currentValueSeen - 1);
+                        currentData.child("completed").setValue(currentValueCompleted + 1);
+                    }
+                }
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
+            }
+        });
+
     }
 }

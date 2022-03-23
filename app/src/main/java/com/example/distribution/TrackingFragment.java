@@ -17,6 +17,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.collection.LLRBNode;
@@ -25,12 +26,19 @@ import java.util.ArrayList;
 
 public class TrackingFragment extends Fragment {
 
+    int issued, seen, completed;
+
     private PieChart pieChartAllStats;
 
     public TrackingFragment() {
         // Required empty public constructor
     }
 
+    public TrackingFragment(int issued, int seen, int completed){
+        this.issued = issued;
+        this.seen = seen;
+        this.completed = completed;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +63,6 @@ public class TrackingFragment extends Fragment {
 
     private void setupPieChart(){
         pieChartAllStats.setDrawHoleEnabled(true);
-        pieChartAllStats.setUsePercentValues(true);
         pieChartAllStats.setEntryLabelTextSize(12);
         pieChartAllStats.setEntryLabelColor(Color.BLACK);
         pieChartAllStats.setCenterText("Task stats");
@@ -63,30 +70,26 @@ public class TrackingFragment extends Fragment {
         pieChartAllStats.getDescription().setEnabled(false);
 
         Legend legend = pieChartAllStats.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legend.setDrawInside(false);
-        legend.setEnabled(true);
+        legend.setEnabled(false);
     }
 
     private void loadPieChartData(){
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(0.25f, "Issued"));
-        entries.add(new PieEntry(0.25f, "Seen"));
-        entries.add(new PieEntry(0.5f, "Completed"));
+        entries.add(new PieEntry(issued, "Issued"));
+        entries.add(new PieEntry(seen, "Seen"));
+        entries.add(new PieEntry(completed, "Completed"));
 
         PieDataSet dataSet = new PieDataSet(entries, "Legend");
         dataSet.setColors(new int[]{R.color.colorIssued, R.color.colorSeen, R.color.colorCompleted}, getActivity());
 
         PieData data = new PieData(dataSet);
         data.setDrawValues(true);
-        data.setValueFormatter(new PercentFormatter(pieChartAllStats));
+        data.setValueFormatter(new DefaultValueFormatter(0));
         data.setValueTextSize(12f);
         data.setValueTextColor(Color.BLACK);
 
         pieChartAllStats.setData(data);
         pieChartAllStats.invalidate();
-        pieChartAllStats.animateY(1400, Easing.EaseInOutQuad);
+        pieChartAllStats.animateY(1400, Easing.EaseInOutQuart);
     }
 }
