@@ -2,15 +2,15 @@ package com.example.distribution;
 
 public class TaskTracking {
 
+    private int issued;
+    private int seen;
+    private int completed;
+
     public TaskTracking(int issued, int seen, int completed) {
         this.issued = issued;
         this.seen = seen;
         this.completed = completed;
     }
-
-    public int issued;
-    public int seen;
-    public int completed;
 
     public TaskTracking() {}
 

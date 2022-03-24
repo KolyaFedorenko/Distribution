@@ -23,39 +23,37 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         AddTaskFragment.OnFragmentCloseListener, TaskDetailtsFragment.OnFragmentSendDetailsToEdit,
         SettingsFragment.OnFragmentSignOut, AuthorizationFragment.OnFragmentSignIn{
 
-    String TRACKING_KEY = "TaskTracking";
-    DatabaseReference databaseReferenceTracking;
-    Integer issued, seen, completed;
+    private String TRACKING_KEY = "TaskTracking";
+    private DatabaseReference databaseReferenceTracking = FirebaseDatabase.getInstance().getReference(TRACKING_KEY);
+    private Integer issued, seen, completed;
 
     private static final String PREFS_FILE = "Account";
     private static final String PREF_ROLE = "Worker";
     private static final boolean PREF_SIGNED_IN = false;
     private static final String PREF_WORKER_NAME = "";
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     private BottomNavigationView bottomNavigationView;
-    Fragment activeFragment;
+    private Fragment activeFragment;
 
-    Fragment addTaskFragment, taskDetailsFragment;
-    Fragment settingsFragment = new SettingsFragment();
-    Fragment trackingFragment;
-    Fragment taskListFragment = new TaskListFragment();
-    Fragment authorizationFragment = new AuthorizationFragment();
+    private Fragment addTaskFragment, taskDetailsFragment;
+    private Fragment settingsFragment = new SettingsFragment();
+    private Fragment trackingFragment;
+    private Fragment taskListFragment = new TaskListFragment();
+    private Fragment authorizationFragment = new AuthorizationFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
-
-        databaseReferenceTracking = FirebaseDatabase.getInstance().getReference(TRACKING_KEY);
         getStatistic();
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationMethod);
         bottomNavigationView.getMenu().findItem(R.id.taskTracking).setEnabled(false);
 
-        if (!getSharedPreferences(PREFS_FILE,MODE_PRIVATE).getBoolean(String.valueOf(PREF_SIGNED_IN), false)){
+        if (!getSharedPreferences(PREFS_FILE, MODE_PRIVATE).getBoolean(String.valueOf(PREF_SIGNED_IN), false)){
             bottomNavigationView.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction().add(R.id.container, authorizationFragment, "authorization").commit();
             activeFragment = authorizationFragment;
@@ -147,11 +145,6 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         activeFragment = taskDetailsFragment;
     }
 
-    public void replaceFragment(Fragment replaced, Fragment replacing){
-        getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
-        activeFragment = replacing;
-    }
-
     @Override
     public void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
         addTaskFragment = new AddTaskFragment(taskName, taskDescription, taskExpDate, taskExpTime);
@@ -166,8 +159,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     @Override
     public void onSignIn(String role, String name) {
-        sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        getSpEditor();
         editor.putString(PREF_ROLE, role);
         editor.putBoolean(String.valueOf(PREF_SIGNED_IN), true);
         editor.putString(PREF_WORKER_NAME, name);
@@ -183,8 +175,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     @Override
     public void onSignOut() {
-        sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        getSpEditor();
         editor.putBoolean(String.valueOf(PREF_SIGNED_IN), false).apply();
         getSupportFragmentManager().beginTransaction().hide(settingsFragment).remove(settingsFragment).commit();
         getSupportFragmentManager().beginTransaction().hide(taskListFragment).remove(taskListFragment).commit();
@@ -200,9 +191,9 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     TaskTracking taskTracking = dataSnapshot.getValue(TaskTracking.class);
-                    issued = taskTracking.issued;
-                    seen = taskTracking.seen;
-                    completed = taskTracking.completed;
+                    issued = taskTracking.getIssued();
+                    seen = taskTracking.getSeen();
+                    completed = taskTracking.getCompleted();
                 }
                 bottomNavigationView.getMenu().findItem(R.id.taskTracking).setEnabled(true);
             }
@@ -212,5 +203,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             }
         };
         databaseReferenceTracking.addValueEventListener(valueEventListener);
+    }
+
+    private void replaceFragment(Fragment replaced, Fragment replacing){
+        getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
+        activeFragment = replacing;
+    }
+
+    private void getSpEditor(){
+        sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 }
