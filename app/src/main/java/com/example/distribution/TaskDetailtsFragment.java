@@ -79,7 +79,7 @@ public class TaskDetailtsFragment extends Fragment {
 
         textTaskName.setText(taskName);
         textTaskDescription.setText(taskDescription);
-        textTaskExpDate.setText(taskExpDate);
+        textTaskExpDate.setText(taskExpDate.substring(6));
         textTaskExpTime.setText(taskExpTime);
         textTaskWorker.setText(taskWorker);
 

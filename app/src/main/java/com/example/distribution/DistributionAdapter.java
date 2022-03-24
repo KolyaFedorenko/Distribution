@@ -38,6 +38,8 @@ public class DistributionAdapter extends ArrayAdapter<Distribution> {
         taskDateView.setText(distribution.getTaskExpirationDate());
         taskTimeView.setText(distribution.getTaskExpirationTime());
 
+        if (taskDescriptionView.length() > 26) taskDescriptionView.setText(taskDescriptionView.getText().toString().substring(0, 26) + "...");
+
         return view;
     }
 }
