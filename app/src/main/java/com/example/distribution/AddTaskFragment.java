@@ -34,32 +34,29 @@ import java.util.Calendar;
 
 public class AddTaskFragment extends Fragment {
 
-    interface OnFragmentCloseListener{
+    public interface OnFragmentCloseListener{
         void onCloseAddTaskFragment();
     }
-
     private OnFragmentCloseListener fragmentCloseListener;
 
-    EditText editTaskName, editTaskDescription, editExpirationTime;
-    TextView textExpirationDate;
-    Button buttonAddTask;
-    ListView listTaskTo;
-    String taskName, taskDesc, taskExpDate, taskExpTime, taskTo;
-    String oldTaskName;
-    boolean filled = false;
+    private EditText editTaskName, editTaskDescription, editExpirationTime;
+    private TextView textExpirationDate;
+    private Button buttonAddTask;
+    private ListView listTaskTo;
+    private String taskName, taskDesc, taskExpDate, taskExpTime, taskTo;
+    private boolean filled = false;
 
-    final Calendar calendar = Calendar.getInstance();
-    String day, month, year;
+    private final Calendar calendar = Calendar.getInstance();
+    private String day, month;
+    private int year;
 
-    DatabaseReference databaseReference, databaseReferenceUsers, databaseReferenceTracking;
+    private DatabaseReference databaseReference, databaseReferenceUsers, databaseReferenceTracking;
 
-    ArrayList<String> users;
-    UserAdapter adapter;
-    String DISTRIBUTION_KEY = "Distribution", USERS_KEY = "Users", TRACKING_KEY = "TaskTracking";
+    private ArrayList<String> users;
+    private UserAdapter adapter;
+    private String DISTRIBUTION_KEY = "Distribution", USERS_KEY = "Users", TRACKING_KEY = "TaskTracking";
 
-    public AddTaskFragment() {
-        // Required empty public constructor
-    }
+    public AddTaskFragment() { }
 
     public AddTaskFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime){
         this.taskName = taskName;
@@ -83,7 +80,6 @@ public class AddTaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDateToday();
     }
 
     @Override
@@ -105,14 +101,15 @@ public class AddTaskFragment extends Fragment {
             textExpirationDate.setText(taskExpDate.substring(6));
             editExpirationTime.setText(taskExpTime);
 
-            oldTaskName = editTaskName.getText().toString();
-
             editTaskName.setEnabled(false);
             buttonAddTask.setBackground(getActivity().getDrawable(R.drawable.rounded_secondary_action_item));
             buttonAddTask.setText("Edit task");
         }
         else{
-            textExpirationDate.setText(day + "." + month + "." + year);
+            day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+            month = Integer.toString(calendar.get(Calendar.MONTH) + 1);
+            year = calendar.get(Calendar.YEAR);
+            textExpirationDate.setText(formatDate(day, month, year));
         }
 
         return view;
@@ -149,9 +146,7 @@ public class AddTaskFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         day = Integer.toString(dayOfMonth);
                         String strMonth = Integer.toString(month + 1);
-                        if (day.length() == 1) day = "0" + day;
-                        if (strMonth.length() == 1) strMonth = "0" + strMonth;
-                        textExpirationDate.setText(day + "." + strMonth + "." + year);
+                        textExpirationDate.setText(formatDate(day, strMonth, year));
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -178,7 +173,7 @@ public class AddTaskFragment extends Fragment {
         });
     }
 
-    public void showToast(String text){
+    private void showToast(String text){
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
@@ -202,12 +197,11 @@ public class AddTaskFragment extends Fragment {
         databaseReferenceUsers.orderByChild("role").equalTo("Worker").addValueEventListener(valueEventListener);
     }
 
-    private void getDateToday(){
-        day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
-        month = Integer.toString(calendar.get(Calendar.MONTH) + 1);
-        year = Integer.toString(calendar.get(Calendar.YEAR));
-        if (day.length() == 1) day = "0" + day;
-        if (month.length() == 1) month = "0" + month;
+    private String formatDate(String dayToFormat, String monthToFormat, int year){
+        String formatDay = dayToFormat, formatMonth = monthToFormat;
+        if (dayToFormat.length() == 1) formatDay = "0" + dayToFormat;
+        if (monthToFormat.length() == 1) formatMonth = "0" + monthToFormat;
+        return formatDay + "." + formatMonth + "." + year;
     }
 
     private void editIssuedTasksCount(){
