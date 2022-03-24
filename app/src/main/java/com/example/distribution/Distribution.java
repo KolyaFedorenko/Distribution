@@ -2,11 +2,11 @@ package com.example.distribution;
 
 public class Distribution {
 
-    public String taskName;
-    public String taskDescription;
-    public String taskExpirationDate;
-    public String taskExpirationTime;
-    public String taskWorker;
+    private String taskName;
+    private String taskDescription;
+    private String taskExpirationDate;
+    private String taskExpirationTime;
+    private String taskWorker;
 
     public Distribution(String taskName, String taskDescription, String taskExpirationDate, String taskExpirationTime, String worker) {
         this.taskName = taskName;
@@ -17,7 +17,6 @@ public class Distribution {
     }
 
     public Distribution(){}
-
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;

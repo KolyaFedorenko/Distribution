@@ -97,7 +97,7 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Distribution distribution = (Distribution)parent.getItemAtPosition(position);
-                fragmentSendDataListener.onSendTaskDetails(distribution.taskName, distribution.taskDescription, distribution.taskExpirationDate, distribution.taskExpirationTime, distribution.taskWorker);
+                fragmentSendDataListener.onSendTaskDetails(distribution.getTaskName(), distribution.getTaskDescription(), distribution.getTaskExpirationDate(), distribution.getTaskExpirationTime(), distribution.getTaskWorker());
             }
         };
         listTasks.setOnItemClickListener(itemClickListener);
@@ -117,7 +117,7 @@ public class TaskListFragment extends Fragment {
                 if(distributions.size() > 0) distributions.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Distribution distribution = dataSnapshot.getValue(Distribution.class);
-                    distributions.add(new Distribution(distribution.taskName, distribution.taskDescription, "Until " + distribution.taskExpirationDate, distribution.taskExpirationTime, "To: " + distribution.taskWorker));
+                    distributions.add(new Distribution(distribution.getTaskName(), distribution.getTaskDescription(), "Until " + distribution.getTaskExpirationDate(), distribution.getTaskExpirationTime(), "To: " + distribution.getTaskWorker()));
                 }
                 adapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
