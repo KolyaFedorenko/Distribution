@@ -2,9 +2,9 @@ package com.example.distribution;
 
 public class User {
 
-    public String login;
-    public String password;
-    public String role;
+    private String login;
+    private String password;
+    private String role;
 
     public User(String login, String password, String role) {
         this.login = login;

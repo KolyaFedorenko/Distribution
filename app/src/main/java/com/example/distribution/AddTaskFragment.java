@@ -184,7 +184,7 @@ public class AddTaskFragment extends Fragment {
                 if (users.size() > 0) users.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     User user = dataSnapshot.getValue(User.class);
-                    users.add(user.login);
+                    users.add(user.getLogin());
                 }
                 adapter.notifyDataSetChanged();
             }

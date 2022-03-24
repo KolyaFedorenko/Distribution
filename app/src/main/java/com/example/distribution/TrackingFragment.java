@@ -26,13 +26,11 @@ import java.util.ArrayList;
 
 public class TrackingFragment extends Fragment {
 
-    int issued, seen, completed;
+    private int issued, seen, completed;
 
     private PieChart pieChartAllStats;
 
-    public TrackingFragment() {
-        // Required empty public constructor
-    }
+    public TrackingFragment() { }
 
     public TrackingFragment(int issued, int seen, int completed){
         this.issued = issued;
@@ -43,7 +41,6 @@ public class TrackingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

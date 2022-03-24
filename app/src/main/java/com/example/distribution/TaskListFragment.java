@@ -28,30 +28,28 @@ import java.util.List;
 
 public class TaskListFragment extends Fragment {
 
-    interface OnFragmentSendDataListener{
+    public interface OnFragmentSendDataListener{
         void onAddNewTask();
         void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker);
     }
 
     private OnFragmentSendDataListener fragmentSendDataListener;
 
-    ProgressBar progressBar;
-    ListView listTasks;
-    Button buttonAddNewTask;
-    ArrayList<Distribution> distributions;
-    DistributionAdapter adapter;
+    private ProgressBar progressBar;
+    private ListView listTasks;
+    private Button buttonAddNewTask;
+    private ArrayList<Distribution> distributions;
+    private DistributionAdapter adapter;
 
-    DatabaseReference databaseReference;
-    String DISTRIBUTION_KEY = "Distribution";
+    private DatabaseReference databaseReference;
+    private String DISTRIBUTION_KEY = "Distribution";
 
     private static final String PREFS_FILE = "Account";
     private static final String PREF_ROLE = "Worker";
     private static final String PREF_WORKER_NAME = "";
-    String userRole;
+    private String userRole;
 
-    public TaskListFragment() {
-        // Required empty public constructor
-    }
+    public TaskListFragment() { }
 
     @Override
     public void onAttach(@NonNull Context context) {

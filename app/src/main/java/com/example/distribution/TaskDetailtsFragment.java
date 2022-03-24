@@ -23,23 +23,23 @@ import com.google.firebase.database.Transaction;
 
 public class TaskDetailtsFragment extends Fragment {
 
-    interface OnFragmentSendDetailsToEdit{
+    public interface OnFragmentSendDetailsToEdit{
         void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime);
         void onCloseTaskDetailsFragment();
     }
 
     private OnFragmentSendDetailsToEdit fragmentSendDetailsToEdit;
 
-    String taskName, taskDescription, taskExpDate, taskExpTime, taskWorker;
-    TextView textTaskName, textTaskDescription, textTaskExpDate, textTaskExpTime, textTaskWorker;
-    Button buttonTaskSeen, buttonTaskCompleted, buttonEditTask, buttonCloseTask;
+    private String taskName, taskDescription, taskExpDate, taskExpTime, taskWorker;
+    private TextView textTaskName, textTaskDescription, textTaskExpDate, textTaskExpTime, textTaskWorker;
+    private Button buttonTaskSeen, buttonTaskCompleted, buttonEditTask, buttonCloseTask;
 
     private static final String PREFS_FILE = "Account";
     private static final String PREF_ROLE = "Worker";
-    String userRole;
+    private String userRole;
 
-    DatabaseReference databaseReference, databaseReferenceTracking;
-    String DISTRIBUTION_KEY = "Distribution", TRACKING_KEY = "TaskTracking";
+    private DatabaseReference databaseReference, databaseReferenceTracking;
+    private String DISTRIBUTION_KEY = "Distribution", TRACKING_KEY = "TaskTracking";
 
     public TaskDetailtsFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
         this.taskName = taskName;
@@ -185,6 +185,5 @@ public class TaskDetailtsFragment extends Fragment {
 
             }
         });
-
     }
 }

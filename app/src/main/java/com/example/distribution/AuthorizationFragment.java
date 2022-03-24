@@ -140,9 +140,9 @@ public class AuthorizationFragment extends Fragment {
             public void onDataChange(DataSnapshot snapshot) {
                 try {
                     receivedUser = snapshot.child(login).getValue(User.class);
-                    receivedLogin = receivedUser.login;
-                    receivedPassword = receivedUser.password;
-                    receivedRole = receivedUser.role;
+                    receivedLogin = receivedUser.getLogin();
+                    receivedPassword = receivedUser.getPassword();
+                    receivedRole = receivedUser.getRole();
                 }
                 catch (Exception e){
                     showToast("You don't signed up! Please sign up now!");

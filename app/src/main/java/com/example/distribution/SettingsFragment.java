@@ -15,17 +15,14 @@ import android.widget.Toast;
 
 public class SettingsFragment extends Fragment {
 
-    interface OnFragmentSignOut{
+    public interface OnFragmentSignOut{
         void onSignOut();
     }
+    private OnFragmentSignOut fragmentSignOut;
 
-    OnFragmentSignOut fragmentSignOut;
+    private Button buttonSignOut;
 
-    Button buttonSignOut;
-
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
+    public SettingsFragment() { }
 
     @Override
     public void onAttach(@NonNull Context context) {
