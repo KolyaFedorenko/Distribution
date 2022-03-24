@@ -39,16 +39,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editExpirationTime"
+    <TextView
+        android:id="@+id/textExpirationTime"
         style="@style/EditTextHint"
         android:layout_width="320dp"
         android:layout_height="56dp"
         android:layout_marginTop="272dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
-        android:hint="Expiration time"
-        android:inputType="time"
+        android:text="Expiration time"
+        android:paddingTop="16dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
