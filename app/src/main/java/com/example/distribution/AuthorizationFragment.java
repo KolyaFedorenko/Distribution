@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,23 +23,21 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AuthorizationFragment extends Fragment {
 
-    interface OnFragmentSignIn{
+    public interface OnFragmentSignIn{
         void onSignIn(String role, String name);
     }
-
     private OnFragmentSignIn fragmentSignIn;
 
-    String login, password, receivedLogin, receivedPassword, receivedRole;
-    User receivedUser;
+    private String login = "", password, receivedLogin, receivedPassword, receivedRole;
+    private User receivedUser;
 
-    DatabaseReference databaseReference;
-    String DISTRIBUTION_KEY = "Users";
+    private DatabaseReference databaseReference;
+    private String DISTRIBUTION_KEY = "Users";
 
-    EditText editLogin, editPassword;
-    Button buttonSignUp, buttonSignIn;
+    private EditText editLogin, editPassword;
+    private Button buttonSignUp, buttonSignIn;
 
-    public AuthorizationFragment() {
-    }
+    public AuthorizationFragment() { }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,7 +53,6 @@ public class AuthorizationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -68,12 +67,32 @@ public class AuthorizationFragment extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference(DISTRIBUTION_KEY);
 
+        editLogin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                login = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        editPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) getFirebaseLoginAndPassword();
+            }
+        });
+
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getLoginAndPassword();
                 if (!login.equals("") && !password.equals("")) {
-                    getFirebaseLoginAndPassword();
                     if (login.equals(receivedLogin) && !password.equals(receivedPassword)){
                         showToast("Incorrect password!");
                     }
@@ -116,7 +135,7 @@ public class AuthorizationFragment extends Fragment {
     }
 
     private void getFirebaseLoginAndPassword(){
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 try {
@@ -132,6 +151,7 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
+        databaseReference.addValueEventListener(valueEventListener);
     }
 }
