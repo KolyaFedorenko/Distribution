@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -29,6 +31,10 @@ public class TrackingFragment extends Fragment {
     private int issued, seen, completed;
 
     private PieChart pieChartAllStats;
+    private TextView textChartUnavailable;
+
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
 
     public TrackingFragment() { }
 
@@ -54,8 +60,16 @@ public class TrackingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pieChartAllStats = view.findViewById(R.id.pieChartAllStats);
-        setupPieChart();
-        loadPieChartData();
+        textChartUnavailable = view.findViewById(R.id.textChartUnavailable);
+
+        if (getUserRole().equals("Manager")) {
+            setupPieChart();
+            loadPieChartData();
+        }
+        else{
+            pieChartAllStats.setVisibility(View.GONE);
+            textChartUnavailable.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupPieChart(){
@@ -88,5 +102,9 @@ public class TrackingFragment extends Fragment {
         pieChartAllStats.setData(data);
         pieChartAllStats.invalidate();
         pieChartAllStats.animateY(1400, Easing.EaseInOutQuart);
+    }
+
+    private String getUserRole(){
+        return getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
     }
 }
