@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -11,7 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class SettingsFragment extends Fragment {
 
@@ -21,6 +33,17 @@ public class SettingsFragment extends Fragment {
     private OnFragmentSignOut fragmentSignOut;
 
     private Button buttonSignOut;
+    private TextView textSignedAs, textCheckPrivateReminders, textClearPrivateReminders;
+    private EditText editPrivateReminder, editAppReview, editChangePassword;
+    private ImageView imageManager;
+
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+    private static final String PREF_WORKER_NAME = "";
+
+    private static final String FILE_NAME = "PrivateReminders.txt";
+
+    private DatabaseReference databaseReference;
 
     public SettingsFragment() { }
 
@@ -37,20 +60,78 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         buttonSignOut = view.findViewById(R.id.buttonSignOut);
+        textSignedAs = view.findViewById(R.id.textSignedAs);
+        imageManager = view.findViewById(R.id.imageManager);
+
+        textCheckPrivateReminders = view.findViewById(R.id.textCheckPrivateReminders);
+        textClearPrivateReminders = view.findViewById(R.id.textClearPrivateReminders);
+        editChangePassword = view.findViewById(R.id.editChangePassword);
+        editPrivateReminder = view.findViewById(R.id.editPrivateReminder);
+        editAppReview = view.findViewById(R.id.editAppReview);
+
+        textSignedAs.setText(textSignedAs.getText().toString() + getUserLogin().toUpperCase());
+        if (getUserRole().equals("Manager")) imageManager.setVisibility(View.VISIBLE);
+
+        editChangePassword.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                databaseReference.child("Users").child(getUserLogin()).child("password").setValue(editChangePassword.getText().toString());
+                showToast("Password has been changed");
+                editChangePassword.setText("");
+                return true;
+            }
+        });
+
+        editAppReview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                databaseReference.child("Reviews").child("From " + getUserLogin()).setValue(editAppReview.getText().toString());
+                showToast("Feedback has been sent");
+                editChangePassword.setText("");
+                return true;
+            }
+        });
+
+        editPrivateReminder.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                addPrivateReminder(editPrivateReminder.getText().toString() + "\n", Context.MODE_APPEND);
+                showToast("Added to private reminders");
+                return true;
+            }
+        });
+
+        textCheckPrivateReminders.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                checkPrivateReminders();
+                return true;
+            }
+        });
+
+        textClearPrivateReminders.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                addPrivateReminder("", Context.MODE_PRIVATE);
+                showToast("List of private reminders was cleared");
+                return true;
+            }
+        });
 
         buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,5 +139,61 @@ public class SettingsFragment extends Fragment {
                 fragmentSignOut.onSignOut();
             }
         });
+    }
+
+    private String getUserRole(){
+        return getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
+    }
+
+    private String getUserLogin(){
+        return getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_WORKER_NAME, "");
+    }
+
+    private void showToast(String text){
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkPrivateReminders(){
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = getActivity().openFileInput(FILE_NAME);
+            byte[] bytes = new byte[fileInputStream.available()];
+            fileInputStream.read(bytes);
+            String privateReminders = new String(bytes);
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme).create();
+            alertDialog.setTitle("Private reminders");
+            alertDialog.setMessage(privateReminders);
+            alertDialog.show();
+        }
+        catch (Exception e) {
+            showToast("Sorry, there was an error");
+        }
+        finally {
+            try {
+                if (fileInputStream != null) fileInputStream.close();
+            }
+            catch (Exception e) {
+                showToast("Sorry, there was an error");
+            }
+        }
+    }
+
+    private void addPrivateReminder(String reminderToAdd, int mode){
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = getActivity().openFileOutput(FILE_NAME, mode);
+            fileOutputStream.write(reminderToAdd.getBytes());
+        }
+        catch (Exception e){
+            showToast("Sorry, there was an error");
+        }
+        finally {
+            try {
+                if (fileOutputStream!=null) fileOutputStream.close();
+            }
+            catch (Exception e){
+                showToast("Sorry, there was an error");
+            }
+        }
     }
 }
