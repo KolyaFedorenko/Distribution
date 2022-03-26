@@ -114,7 +114,7 @@ public class AddTaskFragment extends Fragment {
             month = Integer.toString(calendar.get(Calendar.MONTH) + 1);
             year = calendar.get(Calendar.YEAR);
             textExpirationDate.setText(formatDate(day, month, year));
-            textExpirationTime.setText(nowHour + ":" + nowMinute);
+            textExpirationTime.setText(nowHour + ":" + formatMinute(String.valueOf(nowMinute)));
         }
 
         return view;
