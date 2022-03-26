@@ -33,6 +33,7 @@ public class AuthorizationFragment extends Fragment {
 
     private DatabaseReference databaseReference;
     private String DISTRIBUTION_KEY = "Users";
+    private boolean userExist = false;
 
     private EditText editLogin, editPassword;
     private Button buttonSignUp, buttonSignIn;
@@ -112,9 +113,14 @@ public class AuthorizationFragment extends Fragment {
             public void onClick(View v) {
                 getLoginAndPassword();
                 if (!login.equals("") && !password.equals("")) {
-                    User user = new User(login, password, "Worker");
-                    databaseReference.child(login).setValue(user);
-                    showToast("You have been signed up!");
+                    if (!userExist) {
+                        User user = new User(login, password, "Worker");
+                        databaseReference.child(login).setValue(user);
+                        showToast("You have been signed up!");
+                    }
+                    else{
+                        showToast("User with this name is already registered");
+                    }
                 }
                 else{
                     showToast("One or more fields is empty!");
@@ -143,9 +149,11 @@ public class AuthorizationFragment extends Fragment {
                     receivedLogin = receivedUser.getLogin();
                     receivedPassword = receivedUser.getPassword();
                     receivedRole = receivedUser.getRole();
+                    userExist = true;
                 }
                 catch (Exception e){
                     showToast("You don't signed up! Please sign up now!");
+                    userExist = false;
                 }
             }
             @Override

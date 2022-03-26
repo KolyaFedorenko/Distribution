@@ -11,31 +11,32 @@
         android:id="@+id/buttonSignIn"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="288dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/rounded_action_item"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
     <Button
         android:id="@+id/buttonSignUp"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="352dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_secondary_action_item"
         android:text="Sign Up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSignIn" />
 
     <EditText
+        style="@style/EditTextHint"
         android:id="@+id/editLogin"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
         android:hint="Login"
@@ -48,17 +49,18 @@
 
     <EditText
         android:id="@+id/editPassword"
+        style="@style/EditTextHint"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

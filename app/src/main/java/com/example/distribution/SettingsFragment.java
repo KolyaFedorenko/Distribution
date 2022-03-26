@@ -33,7 +33,7 @@ public class SettingsFragment extends Fragment {
     private OnFragmentSignOut fragmentSignOut;
 
     private Button buttonSignOut;
-    private TextView textSignedAs, textCheckPrivateReminders, textClearPrivateReminders;
+    private TextView textSignedAs, textCheckPrivateReminders, textClearPrivateReminders, textAppInformation;
     private EditText editPrivateReminder, editAppReview, editChangePassword;
     private ImageView imageManager;
 
@@ -78,13 +78,14 @@ public class SettingsFragment extends Fragment {
         textSignedAs = view.findViewById(R.id.textSignedAs);
         imageManager = view.findViewById(R.id.imageManager);
 
+        textAppInformation = view.findViewById(R.id.textAppInformation);
         textCheckPrivateReminders = view.findViewById(R.id.textCheckPrivateReminders);
         textClearPrivateReminders = view.findViewById(R.id.textClearPrivateReminders);
         editChangePassword = view.findViewById(R.id.editChangePassword);
         editPrivateReminder = view.findViewById(R.id.editPrivateReminder);
         editAppReview = view.findViewById(R.id.editAppReview);
 
-        textSignedAs.setText(textSignedAs.getText().toString() + getUserLogin().toUpperCase());
+        textSignedAs.setText(textSignedAs.getText().toString() + getUserLogin());
         if (getUserRole().equals("Manager")) imageManager.setVisibility(View.VISIBLE);
 
         editChangePassword.setOnLongClickListener(new View.OnLongClickListener() {
@@ -102,7 +103,7 @@ public class SettingsFragment extends Fragment {
             public boolean onLongClick(View v) {
                 databaseReference.child("Reviews").child("From " + getUserLogin()).setValue(editAppReview.getText().toString());
                 showToast("Feedback has been sent");
-                editChangePassword.setText("");
+                editAppReview.setText("");
                 return true;
             }
         });
@@ -112,6 +113,7 @@ public class SettingsFragment extends Fragment {
             public boolean onLongClick(View v) {
                 addPrivateReminder(editPrivateReminder.getText().toString() + "\n", Context.MODE_APPEND);
                 showToast("Added to private reminders");
+                editPrivateReminder.setText("");
                 return true;
             }
         });
@@ -129,6 +131,14 @@ public class SettingsFragment extends Fragment {
             public boolean onLongClick(View v) {
                 addPrivateReminder("", Context.MODE_PRIVATE);
                 showToast("List of private reminders was cleared");
+                return true;
+            }
+        });
+
+        textAppInformation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showToast("Version 1.1");
                 return true;
             }
         });

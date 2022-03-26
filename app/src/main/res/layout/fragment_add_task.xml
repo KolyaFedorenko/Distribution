@@ -13,7 +13,7 @@
         android:id="@+id/editTaskName"
         android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="55dp"
         android:ems="10"
         android:maxLength="16"
         android:inputType="textPersonName"
@@ -28,78 +28,78 @@
         android:id="@+id/textExpirationDate"
         android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
-        android:text="Expiration date"
-        android:textColor="@color/black"
         android:paddingTop="16dp"
+        android:text="Expiration date"
         android:textAlignment="center"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTaskDescription" />
 
     <TextView
         android:id="@+id/textExpirationTime"
         style="@style/EditTextHint"
         android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
-        android:text="Expiration time"
         android:paddingTop="16dp"
+        android:text="Expiration time"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textExpirationDate" />
 
     <EditText
-        style="@style/EditTextHint"
-        android:background="@drawable/rounded_item"
         android:id="@+id/editTaskDescription"
+        style="@style/EditTextHint"
         android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_item"
         android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="Task description"
+        android:inputType="textMultiLine"
         android:maxLength="180"
         android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:gravity="center_horizontal"
         android:paddingTop="16dp"
-        android:hint="Task description"
+        android:paddingEnd="20dp"
         android:textAlignment="center"
-        android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTaskName" />
 
     <ListView
         android:id="@+id/listTaskTo"
         android:layout_width="320dp"
+        android:layout_marginTop="15dp"
         android:layout_height="56dp"
-        android:layout_marginTop="344dp"
         android:background="@drawable/rounded_item"
+        android:divider="@null"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollbars="none"
-        android:divider="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/textExpirationTime" />
 
     <Button
         android:id="@+id/buttonAddTask"
         android:layout_width="320dp"
         android:layout_height="46dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/rounded_action_item"
         android:text="Add task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/listTaskTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
