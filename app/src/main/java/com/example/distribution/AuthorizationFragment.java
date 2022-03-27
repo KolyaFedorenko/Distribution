@@ -34,6 +34,7 @@ public class AuthorizationFragment extends Fragment {
     private DatabaseReference databaseReference;
     private String DISTRIBUTION_KEY = "Users";
     private boolean userExist = false;
+    private PasswordHasher passwordHasher = new PasswordHasher();
 
     private EditText editLogin, editPassword;
     private Button buttonSignUp, buttonSignIn;
@@ -94,12 +95,17 @@ public class AuthorizationFragment extends Fragment {
             public void onClick(View v) {
                 getLoginAndPassword();
                 if (!login.equals("") && !password.equals("")) {
-                    if (login.equals(receivedLogin) && !password.equals(receivedPassword)){
-                        showToast("Incorrect password!");
+                    try {
+                        if (login.equals(receivedLogin) && !passwordHasher.validatePassword(password, receivedPassword)) {
+                            showToast("Incorrect password!");
+                        }
+                        if (login.equals(receivedLogin) && passwordHasher.validatePassword(password, receivedPassword)) {
+                            showToast("You have been signed in!");
+                            fragmentSignIn.onSignIn(receivedRole, receivedLogin);
+                        }
                     }
-                    if (login.equals(receivedLogin) && password.equals(receivedPassword)){
-                        showToast("You have been signed in!");
-                        fragmentSignIn.onSignIn(receivedRole, receivedLogin);
+                    catch (Exception e) {
+                        showToast("Password decrypt error");
                     }
                 }
                 else {
@@ -114,6 +120,8 @@ public class AuthorizationFragment extends Fragment {
                 getLoginAndPassword();
                 if (!login.equals("") && !password.equals("")) {
                     if (!userExist) {
+                        try {password = passwordHasher.generatePasswordHash(password); }
+                        catch (Exception ignored) {}
                         User user = new User(login, password, "Worker");
                         databaseReference.child(login).setValue(user);
                         showToast("You have been signed up!");

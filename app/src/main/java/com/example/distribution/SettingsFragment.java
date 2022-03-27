@@ -43,6 +43,9 @@ public class SettingsFragment extends Fragment {
 
     private static final String FILE_NAME = "PrivateReminders.txt";
 
+    private PasswordHasher passwordHasher = new PasswordHasher();
+    private String password;
+
     private DatabaseReference databaseReference;
 
     public SettingsFragment() { }
@@ -91,7 +94,10 @@ public class SettingsFragment extends Fragment {
         editChangePassword.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                databaseReference.child("Users").child(getUserLogin()).child("password").setValue(editChangePassword.getText().toString());
+                password = editChangePassword.getText().toString();
+                try {password = passwordHasher.generatePasswordHash(password); }
+                catch (Exception ignored) {}
+                databaseReference.child("Users").child(getUserLogin()).child("password").setValue(password);
                 showToast("Password has been changed");
                 editChangePassword.setText("");
                 return true;
