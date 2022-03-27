@@ -30,11 +30,11 @@ public class PasswordHasherUnitTest {
     @Test
     public void checkGeneratedHashLengthSame() throws Exception{
         generatedHash = passwordHasher.generatePasswordHash(smallPassword);
-        assertEquals(32+1+128, generatedHash.length());
+        assertEquals(32+128, generatedHash.length());
         generatedHash = passwordHasher.generatePasswordHash(mediumPassword);
-        assertEquals(32+1+128, generatedHash.length());
+        assertEquals(32+128, generatedHash.length());
         generatedHash = passwordHasher.generatePasswordHash(largePassword);
-        assertEquals(32+1+128, generatedHash.length());
+        assertEquals(32+128, generatedHash.length());
     }
 
     @Test

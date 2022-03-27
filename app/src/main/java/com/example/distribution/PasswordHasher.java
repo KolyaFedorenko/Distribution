@@ -18,7 +18,7 @@ public class PasswordHasher {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
         byte[] hash = keyFactory.generateSecret(keySpec).getEncoded();
-        return toHex(salt) + "-" + toHex(hash);
+        return toHex(salt) + toHex(hash);
     }
 
     private byte[] getSalt() throws NoSuchAlgorithmException{
@@ -42,10 +42,9 @@ public class PasswordHasher {
     }
 
     public boolean validatePassword(String passwordToCheck, String passwordFromDB) throws NoSuchAlgorithmException, InvalidKeySpecException{
-        String[] parts = passwordFromDB.split("-");
 
-        byte[] salt = fromHex(parts[0]);
-        byte[] hash = fromHex(parts[1]);
+        byte[] salt = fromHex(passwordFromDB.substring(0,32));
+        byte[] hash = fromHex(passwordFromDB.substring(32, 156));
 
         PBEKeySpec keySpec = new PBEKeySpec(passwordToCheck.toCharArray(), salt, 10, hash.length * 8);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
