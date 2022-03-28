@@ -2,19 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/fragmentAddTask"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TasksFragment">
+    tools:context=".AddTaskFragment">
 
     <EditText
         style="@style/EditTextHint"
         android:background="@drawable/rounded_item"
         android:id="@+id/editTaskName"
-        android:layout_width="216dp"
+        android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="55dp"
         android:ems="10"
+        android:maxLength="16"
         android:inputType="textPersonName"
         android:hint="Task name"
         android:textAlignment="center"
@@ -23,77 +24,82 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editExpirationDate"
-        style="@style/EditTextHint"
-        android:layout_width="216dp"
+    <TextView
+        android:id="@+id/textExpirationDate"
+        android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_item"
         android:ems="10"
-        android:hint="Expiration date"
-        android:inputType="date"
+        android:paddingTop="16dp"
+        android:text="Expiration date"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTaskDescription" />
+
+    <TextView
+        android:id="@+id/textExpirationTime"
+        style="@style/EditTextHint"
+        android:layout_width="320dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_item"
+        android:ems="10"
+        android:paddingTop="16dp"
+        android:text="Expiration time"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textExpirationDate" />
 
     <EditText
-        android:id="@+id/editExpirationTime"
-        style="@style/EditTextHint"
-        android:layout_width="216dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="272dp"
-        android:background="@drawable/rounded_item"
-        android:ems="10"
-        android:hint="Expiration time"
-        android:inputType="time"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        style="@style/EditTextHint"
-        android:background="@drawable/rounded_item"
         android:id="@+id/editTaskDescription"
-        android:layout_width="216dp"
+        style="@style/EditTextHint"
+        android:layout_width="320dp"
         android:layout_height="56dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_item"
         android:ems="10"
         android:gravity="center_horizontal"
-        android:paddingTop="14dp"
         android:hint="Task description"
-        android:textAlignment="center"
         android:inputType="textMultiLine"
+        android:maxLength="180"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTaskName" />
 
-    <Spinner
-        android:id="@+id/spinnerTaskTo"
-        android:layout_width="216dp"
+    <ListView
+        android:id="@+id/listTaskTo"
+        android:layout_width="320dp"
+        android:layout_marginTop="15dp"
         android:layout_height="56dp"
-        android:layout_marginTop="344dp"
         android:background="@drawable/rounded_item"
+        android:divider="@null"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textExpirationTime" />
 
     <Button
         android:id="@+id/buttonAddTask"
-        android:layout_width="216dp"
+        android:layout_width="320dp"
         android:layout_height="46dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/rounded_action_item"
         android:text="Add task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/listTaskTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

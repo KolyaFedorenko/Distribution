@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentAddTask"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddTaskFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bold_rounded_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textTaskName"
+            android:layout_width="190dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_item"
+            android:ems="10"
+            android:text="Task name"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/rounded_item"
+            android:id="@+id/textTaskExpDate"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:text="Task date"
+            android:textColor="@color/grey"
+            android:drawableLeft="@drawable/ic_baseline_calendar"
+            android:drawablePadding="10dp"
+            android:paddingLeft="15dp"
+            android:textSize="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.078"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTaskDescription" />
+
+        <TextView
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/textTaskExpTime"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_item"
+            android:ems="10"
+            android:text="Time"
+            android:textColor="@color/grey"
+            android:drawableLeft="@drawable/ic_baseline_watch"
+            android:drawablePadding="10dp"
+            android:paddingLeft="15dp"
+            android:paddingVertical="8dp"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textTaskExpDate"
+            app:layout_constraintTop_toBottomOf="@+id/textTaskDescription" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/textTaskDescription"
+            android:layout_width="260dp"
+            android:layout_height="0dp"
+            android:ems="10"
+            android:paddingBottom="4dp"
+            android:text="Task description"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTaskName" />
+
+        <TextView
+            android:background="@drawable/rounded_item"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/textTaskWorker"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:paddingVertical="8dp"
+            android:text="Task worker"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:drawableLeft="@drawable/ic_baseline_account"
+            android:paddingLeft="70dp"
+            android:drawablePadding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTaskExpTime"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/buttonTaskCompleted"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_action_item"
+        android:text="Task completed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTaskSeen" />
+
+    <Button
+        android:id="@+id/buttonTaskSeen"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_secondary_action_item"
+        android:text="Task seen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Button
+        android:id="@+id/buttonEditTask"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_secondary_action_item"
+        android:text="Edit task"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Button
+        android:id="@+id/buttonCloseTask"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_danger_action_item"
+        android:text="Close task"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditTask" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

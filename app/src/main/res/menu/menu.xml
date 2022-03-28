@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item
-        android:id="@+id/userTasks"
-        android:title="Tasks"
-        android:icon="@drawable/ic_baseline_account"/>
+        android:id="@+id/taskList"
+        android:title="Task list"
+        android:icon="@drawable/ic_baseline_assignment"/>
+
+    <item
+        android:id="@+id/taskTracking"
+        android:title="Task tracking"
+        android:icon="@drawable/ic_baseline_tracking"/>
+
     <item
         android:id="@+id/settings"
-        android:title="Profile"
+        android:title="Settings"
         android:icon="@drawable/ic_baseline_settings"/>
 
 </menu>
