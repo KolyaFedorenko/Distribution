@@ -73,52 +73,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             switch (menuItem.getItemId())
             {
                 case R.id.taskList:
-                    if (activeFragment.equals(addTaskFragment)){
-                        replaceFragment(addTaskFragment, taskListFragment);
-                    }
-                    if (activeFragment.equals(taskDetailsFragment)){
-                        replaceFragment(taskDetailsFragment, taskListFragment);
-                    }
-                    if (activeFragment.equals(trackingFragment)){
-                        replaceFragment(trackingFragment, taskListFragment);
-                    }
-                    else {
-                        getSupportFragmentManager().beginTransaction().hide(activeFragment).show(taskListFragment).commit();
-                        activeFragment = taskListFragment;
-                    }
+                    showSettingsOrTaskList(taskListFragment);
                     break;
 
                 case R.id.taskTracking:
-                    trackingFragment = new TrackingFragment(issued, seen, completed);
-                    if (activeFragment.equals(addTaskFragment)){
-                        getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
-                    }
-                    if (activeFragment.equals(taskDetailsFragment)){
-                        getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
-                    }
-                    if (activeFragment.equals(trackingFragment)){
-                        getSupportFragmentManager().beginTransaction().remove(activeFragment).show(trackingFragment).commit();
-                    }
-                    if(!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment)) {
-                        getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
-                    }
-                    activeFragment = trackingFragment;
+                    showTaskTracking();
                     break;
 
                 case R.id.settings:
-                    if (activeFragment.equals(addTaskFragment)){
-                        replaceFragment(addTaskFragment, settingsFragment);
-                    }
-                    if (activeFragment.equals(taskDetailsFragment)){
-                        replaceFragment(taskDetailsFragment, settingsFragment);
-                    }
-                    if (activeFragment.equals(trackingFragment)){
-                        replaceFragment(trackingFragment, settingsFragment);
-                    }
-                    else {
-                        getSupportFragmentManager().beginTransaction().hide(activeFragment).show(settingsFragment).commit();
-                        activeFragment = settingsFragment;
-                    }
+                    showSettingsOrTaskList(settingsFragment);
                     break;
             }
 
@@ -213,5 +176,29 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private void getSpEditor(){
         sharedPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
         editor = sharedPreferences.edit();
+    }
+
+    private void showSettingsOrTaskList(Fragment fragmentToShow){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment)){
+            replaceFragment(activeFragment, fragmentToShow);
+        }
+        else {
+            getSupportFragmentManager().beginTransaction().hide(activeFragment).show(fragmentToShow).commit();
+            activeFragment = fragmentToShow;
+        }
+    }
+
+    private void showTaskTracking(){
+        trackingFragment = new TrackingFragment(issued, seen, completed);
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment)){
+            getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
+        }
+        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment)) {
+            getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
+        }
+        if (activeFragment.equals(trackingFragment)){
+            getSupportFragmentManager().beginTransaction().remove(activeFragment).show(trackingFragment).commit();
+        }
+        activeFragment = trackingFragment;
     }
 }
