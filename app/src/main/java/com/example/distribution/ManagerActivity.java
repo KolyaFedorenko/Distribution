@@ -37,7 +37,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private BottomNavigationView bottomNavigationView;
     private Fragment activeFragment;
 
-    private Fragment addTaskFragment, taskDetailsFragment;
+    private Fragment addTaskFragment, taskDetailsFragment, workersFragment;
     private Fragment settingsFragment = new SettingsFragment();
     private Fragment trackingFragment;
     private Fragment taskListFragment = new TaskListFragment();
@@ -148,6 +148,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         Toast.makeText(ManagerActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onCheckWorkersList() {
+        if (getSharedPreferences(PREFS_FILE, MODE_PRIVATE).getString(PREF_ROLE, "Worker").equals("Manager")) {
+            workersFragment = new WorkersFragment();
+            getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, workersFragment, "workersFragment").commit();
+            activeFragment = workersFragment;
+        }
+    }
+
     private void getStatistic(){
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -179,7 +188,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     }
 
     private void showSettingsOrTaskList(Fragment fragmentToShow){
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment)){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment) || activeFragment.equals(workersFragment)){
             replaceFragment(activeFragment, fragmentToShow);
         }
         else {
@@ -190,10 +199,10 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     private void showTaskTracking(){
         trackingFragment = new TrackingFragment(issued, seen, completed);
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment)){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(workersFragment)){
             getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
-        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment)) {
+        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment) && !activeFragment.equals(workersFragment)) {
             getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
         if (activeFragment.equals(trackingFragment)){

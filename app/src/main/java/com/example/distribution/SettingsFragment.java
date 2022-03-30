@@ -29,6 +29,7 @@ public class SettingsFragment extends Fragment {
 
     public interface OnFragmentSignOut{
         void onSignOut();
+        void onCheckWorkersList();
     }
     private OnFragmentSignOut fragmentSignOut;
 
@@ -90,6 +91,13 @@ public class SettingsFragment extends Fragment {
 
         textSignedAs.setText(textSignedAs.getText().toString() + getUserLogin());
         if (getUserRole().equals("Manager")) imageManager.setVisibility(View.VISIBLE);
+
+        textSignedAs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSignOut.onCheckWorkersList();
+            }
+        });
 
         editChangePassword.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
