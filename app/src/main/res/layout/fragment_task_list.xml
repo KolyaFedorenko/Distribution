@@ -7,12 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".TaskListFragment">
 
-
     <ListView
         android:id="@+id/listTasks"
         android:scrollbars="none"
         android:layout_width="322dp"
-        android:layout_height="410dp"
+        android:layout_height="425dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded_item"
         app:layout_constraintEnd_toEndOf="parent"
