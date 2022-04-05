@@ -59,14 +59,14 @@ public class WorkersFragment extends Fragment implements WorkerAdapter.WorkerAda
     @Override
     public void onDeleteWorker(String workerName) {
         databaseReference.child(workerName).removeValue();
-        showToast("Worker " + workerName + " has been succesfully deleted");
+        showToast("Работник " + workerName + " был успешно удален");
     }
 
     @Override
     public void onChangeRole(String workerName, String workerRole) {
         if (!workerRole.equals("Manager")) databaseReference.child(workerName).child("role").setValue("Manager");
         else databaseReference.child(workerName).child("role").setValue("Worker");
-        showToast(workerName + "'s role has been succesfully changed");
+        showToast("Роль пользователя " + workerName + " была успешно изменена");
     }
 
     @Override
@@ -75,7 +75,7 @@ public class WorkersFragment extends Fragment implements WorkerAdapter.WorkerAda
         try {password = passwordHasher.generatePasswordHash(password); }
         catch (Exception ignored) {}
         databaseReference.child(workerName).child("password").setValue(password);
-        showToast(workerName + "'s password has been succesfully changed to \"12345\"");
+        showToast("Пароль пользователя " + workerName + " был успешно изменен на \"12345\"");
     }
 
     private void getData(){

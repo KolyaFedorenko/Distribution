@@ -145,7 +145,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         bottomNavigationView.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().add(R.id.container, authorizationFragment, "authorization").commit();
         activeFragment = authorizationFragment;
-        Toast.makeText(ManagerActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ManagerActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
     }
 
     @Override

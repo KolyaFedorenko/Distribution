@@ -76,7 +76,7 @@ public class TrackingFragment extends Fragment {
         pieChartAllStats.setDrawHoleEnabled(true);
         pieChartAllStats.setEntryLabelTextSize(12);
         pieChartAllStats.setEntryLabelColor(Color.BLACK);
-        pieChartAllStats.setCenterText("Task stats");
+        pieChartAllStats.setCenterText("Статистика");
         pieChartAllStats.setCenterTextSize(18);
         pieChartAllStats.getDescription().setEnabled(false);
 
@@ -86,9 +86,9 @@ public class TrackingFragment extends Fragment {
 
     private void loadPieChartData(){
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(issued, "Issued"));
-        entries.add(new PieEntry(seen, "Seen"));
-        entries.add(new PieEntry(completed, "Completed"));
+        entries.add(new PieEntry(issued, "Выдано задач"));
+        entries.add(new PieEntry(seen, "Просмотрено задач"));
+        entries.add(new PieEntry(completed, "Выполнено задач"));
 
         PieDataSet dataSet = new PieDataSet(entries, "Legend");
         dataSet.setColors(new int[]{R.color.colorIssued, R.color.colorSeen, R.color.colorCompleted}, getActivity());

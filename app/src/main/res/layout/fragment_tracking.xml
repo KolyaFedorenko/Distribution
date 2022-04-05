@@ -24,7 +24,7 @@
         android:layout_marginTop="25dp"
         android:layout_width="300dp"
         android:layout_height="400dp"
-        android:text="Unfortunately, this option is not available to you.The task tracking tab is only viewable by managers."
+        android:text="@string/option_unavailable"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="30sp"

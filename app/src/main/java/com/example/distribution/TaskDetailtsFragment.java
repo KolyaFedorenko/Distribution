@@ -79,7 +79,7 @@ public class TaskDetailtsFragment extends Fragment {
 
         textTaskName.setText(taskName);
         textTaskDescription.setText(taskDescription);
-        textTaskExpDate.setText(taskExpDate.substring(6));
+        textTaskExpDate.setText(taskExpDate.substring(3));
         textTaskExpTime.setText(taskExpTime);
         textTaskWorker.setText(taskWorker);
 
@@ -115,7 +115,7 @@ public class TaskDetailtsFragment extends Fragment {
         buttonCloseTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeTask("Task closed");
+                removeTask("Задача удалена!");
                 editTasksCount("Closed");
             }
         });
@@ -123,7 +123,7 @@ public class TaskDetailtsFragment extends Fragment {
         buttonTaskCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeTask("Task marked as completed");
+                removeTask("Задача отмечена как выполенная");
                 editTasksCount("Completed");
             }
         });
@@ -131,6 +131,7 @@ public class TaskDetailtsFragment extends Fragment {
         buttonTaskSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToast("Задача отмечена как просмотренная");
                 editTasksCount("Seen");
                 fragmentSendDetailsToEdit.onCloseTaskDetailsFragment();
             }
