@@ -37,11 +37,13 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private BottomNavigationView bottomNavigationView;
     private Fragment activeFragment;
 
-    private Fragment addTaskFragment, taskDetailsFragment, workersFragment;
+    private Fragment addTaskFragment, taskDetailsFragment;
     private Fragment settingsFragment = new SettingsFragment();
     private Fragment trackingFragment;
     private Fragment taskListFragment = new TaskListFragment();
     private Fragment authorizationFragment = new AuthorizationFragment();
+    private Fragment workersFragment = new WorkersFragment();
+    private Fragment notificationsFragment = new NotificationsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +62,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         }
         else {
             bottomNavigationView.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
-            getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
+            addTNWS();
             activeFragment = taskListFragment;
         }
     }
@@ -73,15 +74,23 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             switch (menuItem.getItemId())
             {
                 case R.id.taskList:
-                    showSettingsOrTaskList(taskListFragment);
+                    showTNWS(taskListFragment);
                     break;
 
                 case R.id.taskTracking:
                     showTaskTracking();
                     break;
 
+                case R.id.notifications:
+                    showTNWS(notificationsFragment);
+                    break;
+
+                case R.id.users:
+                    showTNWS(workersFragment);
+                    break;
+
                 case R.id.settings:
-                    showSettingsOrTaskList(settingsFragment);
+                    showTNWS(settingsFragment);
                     break;
             }
 
@@ -111,7 +120,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     @Override
     public void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
         addTaskFragment = new AddTaskFragment(taskName, taskDescription, taskExpDate, taskExpTime);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").remove(activeFragment).commit();
         activeFragment = addTaskFragment;
     }
 
@@ -131,8 +140,9 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         bottomNavigationView.setSelectedItemId(R.id.taskList);
         taskListFragment = new TaskListFragment();
         settingsFragment = new SettingsFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
+        workersFragment = new WorkersFragment();
+        notificationsFragment = new NotificationsFragment();
+        addTNWS();
         replaceFragment(authorizationFragment, taskListFragment);
     }
 
@@ -142,19 +152,12 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         editor.putBoolean(String.valueOf(PREF_SIGNED_IN), false).apply();
         getSupportFragmentManager().beginTransaction().hide(settingsFragment).remove(settingsFragment).commit();
         getSupportFragmentManager().beginTransaction().hide(taskListFragment).remove(taskListFragment).commit();
+        getSupportFragmentManager().beginTransaction().hide(workersFragment).remove(workersFragment).commit();
+        getSupportFragmentManager().beginTransaction().hide(notificationsFragment).remove(notificationsFragment).commit();
         bottomNavigationView.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().add(R.id.container, authorizationFragment, "authorization").commit();
         activeFragment = authorizationFragment;
         Toast.makeText(ManagerActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCheckWorkersList() {
-        if (getSharedPreferences(PREFS_FILE, MODE_PRIVATE).getString(PREF_ROLE, "Worker").equals("Manager")) {
-            workersFragment = new WorkersFragment();
-            getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, workersFragment, "workersFragment").commit();
-            activeFragment = workersFragment;
-        }
     }
 
     private void getStatistic(){
@@ -187,8 +190,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         editor = sharedPreferences.edit();
     }
 
-    private void showSettingsOrTaskList(Fragment fragmentToShow){
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment) || activeFragment.equals(workersFragment)){
+    private void addTNWS(){
+        getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, workersFragment, "workersFragment").hide(workersFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, notificationsFragment, "notificationsFragment").hide(notificationsFragment).commit();
+    }
+
+    private void showTNWS(Fragment fragmentToShow){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment)){
             replaceFragment(activeFragment, fragmentToShow);
         }
         else {
@@ -199,10 +209,10 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     private void showTaskTracking(){
         trackingFragment = new TrackingFragment(issued, seen, completed);
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(workersFragment)){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment)){
             getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
-        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment) && !activeFragment.equals(workersFragment)) {
+        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment)) {
             getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
         if (activeFragment.equals(trackingFragment)){
