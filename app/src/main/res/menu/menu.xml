@@ -13,6 +13,16 @@
         android:icon="@drawable/ic_baseline_tracking"/>
 
     <item
+        android:id="@+id/notifications"
+        android:title="@string/menu_notifications"
+        android:icon="@drawable/ic_baseline_notifications"/>
+
+    <item
+        android:id="@+id/users"
+        android:title="@string/menu_users"
+        android:icon="@drawable/ic_baseline_assignment_ind"/>
+
+    <item
         android:id="@+id/settings"
         android:title="@string/menu_settings"
         android:icon="@drawable/ic_baseline_settings"/>

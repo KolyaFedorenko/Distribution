@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:itemBackground="@drawable/menu_underline_bottom"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu" />
 

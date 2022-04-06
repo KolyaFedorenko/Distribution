@@ -30,7 +30,7 @@
         android:textSize="30sp"
         android:textStyle="italic"
         android:paddingHorizontal="50dp"
-        android:paddingTop="60dp"
+        android:paddingTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"

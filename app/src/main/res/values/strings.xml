@@ -27,4 +27,7 @@
     <string name="close_task">Удалить задачу</string>
     <string name="add_new_task">Добавить новую задачу</string>
     <string name="option_unavailable">К сожалению, эта функция доступна только руководителям</string>
+    <string name="menu_notifications">Уведомления</string>
+    <string name="menu_users">Пользователи</string>
+    <string name="task_list_empty">Список задач пуст</string>
 </resources>
