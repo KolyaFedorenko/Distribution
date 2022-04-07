@@ -123,6 +123,7 @@ public class TaskListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
                 if(distributions.size() == 0) textListEmpty.setVisibility(View.VISIBLE);
+                else textListEmpty.setVisibility(View.GONE);
             }
 
             @Override
