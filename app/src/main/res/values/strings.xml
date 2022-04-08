@@ -36,4 +36,5 @@
     <string name="event_description">Описание события</string>
     <string name="add_event">Добавить событие</string>
     <string name="event_date">Дата события</string>
+    <string name="event_worker">Работники</string>
 </resources>
