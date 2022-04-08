@@ -13,9 +13,9 @@
         android:icon="@drawable/ic_baseline_tracking"/>
 
     <item
-        android:id="@+id/notifications"
-        android:title="@string/menu_notifications"
-        android:icon="@drawable/ic_baseline_notifications"/>
+        android:id="@+id/events"
+        android:title="@string/menu_events"
+        android:icon="@drawable/ic_baseline_whatshot"/>
 
     <item
         android:id="@+id/users"

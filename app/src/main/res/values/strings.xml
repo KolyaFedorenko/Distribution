@@ -31,4 +31,5 @@
     <string name="menu_users">Пользователи</string>
     <string name="task_list_empty">Список задач пуст</string>
     <string name="add">+</string>
+    <string name="menu_events">События</string>
 </resources>

@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NotificationsFragment extends Fragment {
+public class EventsFragment extends Fragment {
 
-    public NotificationsFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 
@@ -22,6 +22,6 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        return inflater.inflate(R.layout.fragment_events, container, false);
     }
 }

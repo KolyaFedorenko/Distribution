@@ -4,14 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +41,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private Fragment taskListFragment = new TaskListFragment();
     private Fragment authorizationFragment = new AuthorizationFragment();
     private Fragment workersFragment = new WorkersFragment();
-    private Fragment notificationsFragment = new NotificationsFragment();
+    private Fragment eventsFragment = new EventsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +79,8 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
                     showTaskTracking();
                     break;
 
-                case R.id.notifications:
-                    showTNWS(notificationsFragment);
+                case R.id.events:
+                    showTNWS(eventsFragment);
                     break;
 
                 case R.id.users:
@@ -141,7 +139,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         taskListFragment = new TaskListFragment();
         settingsFragment = new SettingsFragment();
         workersFragment = new WorkersFragment();
-        notificationsFragment = new NotificationsFragment();
+        eventsFragment = new EventsFragment();
         addTNWS();
         replaceFragment(authorizationFragment, taskListFragment);
     }
@@ -153,7 +151,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         getSupportFragmentManager().beginTransaction().hide(settingsFragment).remove(settingsFragment).commit();
         getSupportFragmentManager().beginTransaction().hide(taskListFragment).remove(taskListFragment).commit();
         getSupportFragmentManager().beginTransaction().hide(workersFragment).remove(workersFragment).commit();
-        getSupportFragmentManager().beginTransaction().hide(notificationsFragment).remove(notificationsFragment).commit();
+        getSupportFragmentManager().beginTransaction().hide(eventsFragment).remove(eventsFragment).commit();
         bottomNavigationView.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().add(R.id.container, authorizationFragment, "authorization").commit();
         activeFragment = authorizationFragment;
@@ -194,7 +192,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         getSupportFragmentManager().beginTransaction().add(R.id.container, taskListFragment, "taskListFragment").commit();
         getSupportFragmentManager().beginTransaction().add(R.id.container, settingsFragment, "settingsFragment").hide(settingsFragment).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.container, workersFragment, "workersFragment").hide(workersFragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, notificationsFragment, "notificationsFragment").hide(notificationsFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, eventsFragment, "eventsFragment").hide(eventsFragment).commit();
     }
 
     private void showTNWS(Fragment fragmentToShow){
