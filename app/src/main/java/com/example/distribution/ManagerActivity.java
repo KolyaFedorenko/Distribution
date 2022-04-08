@@ -19,7 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ManagerActivity extends AppCompatActivity implements TaskListFragment.OnFragmentSendDataListener,
         AddTaskFragment.OnFragmentCloseListener, TaskDetailtsFragment.OnFragmentSendDetailsToEdit,
-        SettingsFragment.OnFragmentSignOut, AuthorizationFragment.OnFragmentSignIn{
+        SettingsFragment.OnFragmentSignOut, AuthorizationFragment.OnFragmentSignIn, EventsFragment.EventFragmentInterface,
+        AddEventFragment.AddEventFragmentInterface {
 
     private String TRACKING_KEY = "TaskTracking";
     private DatabaseReference databaseReferenceTracking = FirebaseDatabase.getInstance().getReference(TRACKING_KEY);
@@ -42,6 +43,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     private Fragment authorizationFragment = new AuthorizationFragment();
     private Fragment workersFragment = new WorkersFragment();
     private Fragment eventsFragment = new EventsFragment();
+    private Fragment addEventFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +160,18 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         Toast.makeText(ManagerActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onAddNewEvent() {
+        addEventFragment = new AddEventFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, addEventFragment, "addEventFragment").hide(activeFragment).commit();
+        activeFragment = addEventFragment;
+    }
+
+    @Override
+    public void onCloseAddEventFragment() {
+        replaceFragment(addEventFragment, eventsFragment);
+    }
+
     private void getStatistic(){
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -196,7 +210,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     }
 
     private void showTNWS(Fragment fragmentToShow){
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment)){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(trackingFragment) || activeFragment.equals(addEventFragment)){
             replaceFragment(activeFragment, fragmentToShow);
         }
         else {
@@ -207,10 +221,10 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     private void showTaskTracking(){
         trackingFragment = new TrackingFragment(issued, seen, completed);
-        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment)){
+        if (activeFragment.equals(addTaskFragment) || activeFragment.equals(taskDetailsFragment) || activeFragment.equals(addEventFragment)){
             getSupportFragmentManager().beginTransaction().remove(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
-        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment)) {
+        if (!activeFragment.equals(addTaskFragment) && !activeFragment.equals(taskDetailsFragment) && !activeFragment.equals(addEventFragment)) {
             getSupportFragmentManager().beginTransaction().hide(activeFragment).add(R.id.container, trackingFragment, "trackingFragment").commit();
         }
         if (activeFragment.equals(trackingFragment)){

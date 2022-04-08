@@ -32,4 +32,7 @@
     <string name="task_list_empty">Список задач пуст</string>
     <string name="add">+</string>
     <string name="menu_events">События</string>
+    <string name="event_name">Название события</string>
+    <string name="event_description">Описание события</string>
+    <string name="add_event">Добавить событие</string>
 </resources>
