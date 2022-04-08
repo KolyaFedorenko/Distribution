@@ -1,5 +1,6 @@
 package com.example.distribution;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -26,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddEventFragment extends Fragment {
 
@@ -35,6 +39,7 @@ public class AddEventFragment extends Fragment {
     private AddEventFragmentInterface addEventFragmentInterface;
 
     private EditText editEventName, editEventDescription;
+    private TextView textEventDate;
     private ListView listEventWorkers;
     private ChipGroup chipGroupEventWorkers;
     private Button buttonAddEvent;
@@ -43,6 +48,8 @@ public class AddEventFragment extends Fragment {
 
     private ArrayList<String> users;
     private UserAdapter adapter;
+
+    private final Calendar calendar = Calendar.getInstance();
 
     public AddEventFragment() { }
 
@@ -73,6 +80,7 @@ public class AddEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textEventDate = view.findViewById(R.id.textEventDate);
         editEventName = view.findViewById(R.id.editEventName);
         editEventDescription = view.findViewById(R.id.editEventDescription);
         listEventWorkers = view.findViewById(R.id.listEventWorkers);
@@ -109,19 +117,38 @@ public class AddEventFragment extends Fragment {
         };
         listEventWorkers.setOnItemClickListener(itemClickListener);
 
+        textEventDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String day = Integer.toString(dayOfMonth);
+                        String strMonth = Integer.toString(month + 1);
+                        textEventDate.setText(formatDate(day, strMonth, year));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String eventName = editEventName.getText().toString();
-                String eventDescription = editEventDescription.getText().toString();
-                String eventWorkers = getSelectedWorkers();
-                if (!eventName.equals("") && !eventDescription.equals("") && !eventWorkers.equals("")){
-                    Event event = new Event(eventName, eventDescription, eventWorkers);
-                    databaseReference.child("Events").child(eventName).setValue(event);
-                    addEventFragmentInterface.onCloseAddEventFragment();
+                try {
+                    String eventName = editEventName.getText().toString();
+                    String eventDescription = editEventDescription.getText().toString();
+                    String eventDate = textEventDate.getText().toString();
+                    String eventWorkers = getSelectedWorkers();
+                    if (!eventName.equals("") && !eventDescription.equals("") && !eventWorkers.equals("") && !eventDate.equals("Дата события")) {
+                        Event event = new Event(eventName, eventDescription, eventWorkers, eventDate);
+                        databaseReference.child("Events").child(eventName).setValue(event);
+                        addEventFragmentInterface.onCloseAddEventFragment();
+                    } else {
+                        Toast.makeText(getActivity(), "Необходимо заполнить все поля!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(getActivity(), "Необходимо заполнить все поля!", Toast.LENGTH_SHORT).show();
+                catch (Exception e){
+                    Toast.makeText(getActivity(), "Необходимо выбрать работников!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -162,5 +189,12 @@ public class AddEventFragment extends Fragment {
             else selectedWorkers += ", " + child.getText().toString();
         }
         return selectedWorkers;
+    }
+
+    private String formatDate(String dayToFormat, String monthToFormat, int year){
+        String formatDay = dayToFormat, formatMonth = monthToFormat;
+        if (dayToFormat.length() == 1) formatDay = "0" + dayToFormat;
+        if (monthToFormat.length() == 1) formatMonth = "0" + monthToFormat;
+        return formatDay + "." + formatMonth + "." + year;
     }
 }

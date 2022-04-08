@@ -30,8 +30,22 @@
         android:background="@drawable/rounded_item"
         android:paddingVertical="17dp"
         android:paddingHorizontal="15dp"
-        android:maxLength="288"
+        android:maxLength="200"
         app:layout_constraintTop_toBottomOf="@id/editEventName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/textEventDate"
+        android:layout_width="320dp"
+        android:layout_height="55dp"
+        android:text="@string/event_date"
+        android:textColor="@color/black"
+        android:background="@drawable/rounded_item"
+        android:textAlignment="center"
+        android:paddingTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/editEventDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"/>
@@ -43,7 +57,7 @@
         android:background="@drawable/rounded_item"
         android:divider="@null"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/editEventDescription"
+        app:layout_constraintTop_toBottomOf="@id/textEventDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"/>
