@@ -11,13 +11,13 @@
         android:id="@+id/buttonAddNewEvent"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/rounded_add_new_event"
         android:text="@string/add"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"
