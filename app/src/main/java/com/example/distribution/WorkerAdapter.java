@@ -25,6 +25,9 @@ public class WorkerAdapter extends ArrayAdapter<User> {
     private List<User> users;
     private Context context;
 
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+
     public WorkerAdapter(Context context, int resource, List<User> users, WorkerAdapterInterface workerAdapterInterface){
         super(context, resource, users);
         this.users = users;
@@ -45,9 +48,16 @@ public class WorkerAdapter extends ArrayAdapter<User> {
 
         User user = users.get(position);
         textWorkerName.setText(user.getLogin());
+
         if (user.getRole().equals("Manager")){
             imageWorkerManager.setVisibility(View.VISIBLE);
             buttonChangeRole.setBackground(context.getDrawable(R.drawable.remove_manager_role_gradient));
+        }
+
+        if (!context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker").equals("Manager")){
+            buttonDeleteWorker.setVisibility(View.INVISIBLE);
+            buttonResetPassword.setVisibility(View.INVISIBLE);
+            buttonChangeRole.setVisibility(View.INVISIBLE);
         }
 
         buttonDeleteWorker.setOnClickListener(new View.OnClickListener() {
