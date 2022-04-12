@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ public class TaskListFragment extends Fragment {
 
     private OnFragmentSendDataListener fragmentSendDataListener;
 
+    private TextView textListEmpty;
     private ProgressBar progressBar;
     private ListView listTasks;
     private Button buttonAddNewTask;
@@ -85,6 +87,7 @@ public class TaskListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textListEmpty = view.findViewById(R.id.textListEmpty);
         progressBar = view.findViewById(R.id.progressBarTaskList);
         listTasks = view.findViewById(R.id.listTasks);
         distributions = new ArrayList<>();
@@ -115,10 +118,12 @@ public class TaskListFragment extends Fragment {
                 if(distributions.size() > 0) distributions.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Distribution distribution = dataSnapshot.getValue(Distribution.class);
-                    distributions.add(new Distribution(distribution.getTaskName(), distribution.getTaskDescription(), "Until " + distribution.getTaskExpirationDate(), distribution.getTaskExpirationTime(), "To: " + distribution.getTaskWorker()));
+                    distributions.add(new Distribution(distribution.getTaskName(), distribution.getTaskDescription(), "До " + distribution.getTaskExpirationDate(), distribution.getTaskExpirationTime(), "Для: " + distribution.getTaskWorker()));
                 }
                 adapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
+                if(distributions.size() == 0) textListEmpty.setVisibility(View.VISIBLE);
+                else textListEmpty.setVisibility(View.GONE);
             }
 
             @Override

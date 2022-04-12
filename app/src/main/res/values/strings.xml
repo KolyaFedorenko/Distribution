@@ -1,5 +1,40 @@
 <resources>
     <string name="app_name">Distribution</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_task_list">Список задач</string>
+    <string name="menu_task_tracking">Отслеживание</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="task_name">Название задачи</string>
+    <string name="task_description">Описание задачи</string>
+    <string name="task_expiration_date">Дата истечения</string>
+    <string name="task_expiration_time">Время истечения</string>
+    <string name="add_task">Добавить задачу</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="you_signed_as">Вы вошли как</string>
+    <string name="change_password">Сменить пароль</string>
+    <string name="create_private_reminder">Создать личное напоминание</string>
+    <string name="check_private_reminders">Просмотреть напоминания</string>
+    <string name="clear_private_reminders">Очистить список напоминаний</string>
+    <string name="app_rewiew">Отзыв о приложении</string>
+    <string name="app_info">Информация о приложении</string>
+    <string name="sign_out">Выйти</string>
+    <string name="task_seen">Задача просмотрена</string>
+    <string name="task_completed">Задача выполнена</string>
+    <string name="edit_task">Редактировать задачу</string>
+    <string name="close_task">Удалить задачу</string>
+    <string name="add_new_task">Добавить новую задачу</string>
+    <string name="option_unavailable">К сожалению, эта функция доступна только руководителям</string>
+    <string name="menu_notifications">Уведомления</string>
+    <string name="menu_users">Пользователи</string>
+    <string name="task_list_empty">Список задач пуст</string>
+    <string name="add">+</string>
+    <string name="menu_events">События</string>
+    <string name="event_name">Название события</string>
+    <string name="event_description">Описание события</string>
+    <string name="add_event">Добавить событие</string>
+    <string name="event_date">Дата события</string>
+    <string name="event_worker">Работники</string>
 </resources>

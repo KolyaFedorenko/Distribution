@@ -97,10 +97,10 @@ public class AuthorizationFragment extends Fragment {
                 if (!login.equals("") && !password.equals("")) {
                     try {
                         if (login.equals(receivedLogin) && !passwordHasher.validatePassword(password, receivedPassword)) {
-                            showToast("Incorrect password!");
+                            showToast("Неверный пароль!");
                         }
                         if (login.equals(receivedLogin) && passwordHasher.validatePassword(password, receivedPassword)) {
-                            showToast("You have been signed in!");
+                            showToast("Вы были авторизованы!");
                             fragmentSignIn.onSignIn(receivedRole, receivedLogin);
                         }
                     }
@@ -109,7 +109,7 @@ public class AuthorizationFragment extends Fragment {
                     }
                 }
                 else {
-                    showToast("One or more fields is empty");
+                    showToast("Необходимо заполнить все поля!");
                 }
             }
         });
@@ -124,14 +124,14 @@ public class AuthorizationFragment extends Fragment {
                         catch (Exception ignored) {}
                         User user = new User(login, password, "Worker");
                         databaseReference.child(login).setValue(user);
-                        showToast("You have been signed up!");
+                        showToast("Вы были зарегистрированы!");
                     }
                     else{
-                        showToast("User with this name is already registered");
+                        showToast("Пользователь с таким именем уже зарегистрирован");
                     }
                 }
                 else{
-                    showToast("One or more fields is empty!");
+                    showToast("Необходимо заполнить все поля!");
                 }
             }
         });
@@ -160,7 +160,7 @@ public class AuthorizationFragment extends Fragment {
                     userExist = true;
                 }
                 catch (Exception e){
-                    showToast("You don't signed up! Please sign up now!");
+                    showToast("Вы не зарегистрированы! Пожалуйста, введите данные и нажмите на кнопку \"Регистрация\"");
                     userExist = false;
                 }
             }

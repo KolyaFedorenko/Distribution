@@ -4,17 +4,27 @@
 
     <item
         android:id="@+id/taskList"
-        android:title="Task list"
+        android:title="@string/menu_task_list"
         android:icon="@drawable/ic_baseline_assignment"/>
 
     <item
         android:id="@+id/taskTracking"
-        android:title="Task tracking"
+        android:title="@string/menu_task_tracking"
         android:icon="@drawable/ic_baseline_tracking"/>
 
     <item
+        android:id="@+id/events"
+        android:title="@string/menu_events"
+        android:icon="@drawable/ic_baseline_whatshot"/>
+
+    <item
+        android:id="@+id/users"
+        android:title="@string/menu_users"
+        android:icon="@drawable/ic_baseline_assignment_ind"/>
+
+    <item
         android:id="@+id/settings"
-        android:title="Settings"
+        android:title="@string/menu_settings"
         android:icon="@drawable/ic_baseline_settings"/>
 
 </menu>

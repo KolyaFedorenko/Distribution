@@ -29,7 +29,6 @@ public class SettingsFragment extends Fragment {
 
     public interface OnFragmentSignOut{
         void onSignOut();
-        void onCheckWorkersList();
     }
     private OnFragmentSignOut fragmentSignOut;
 
@@ -89,15 +88,8 @@ public class SettingsFragment extends Fragment {
         editPrivateReminder = view.findViewById(R.id.editPrivateReminder);
         editAppReview = view.findViewById(R.id.editAppReview);
 
-        textSignedAs.setText(textSignedAs.getText().toString() + getUserLogin());
+        textSignedAs.setText(textSignedAs.getText().toString() + " " +  getUserLogin());
         if (getUserRole().equals("Manager")) imageManager.setVisibility(View.VISIBLE);
-
-        textSignedAs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentSignOut.onCheckWorkersList();
-            }
-        });
 
         editChangePassword.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -106,7 +98,7 @@ public class SettingsFragment extends Fragment {
                 try {password = passwordHasher.generatePasswordHash(password); }
                 catch (Exception ignored) {}
                 databaseReference.child("Users").child(getUserLogin()).child("password").setValue(password);
-                showToast("Password has been changed");
+                showToast("Пароль был успешно изменен");
                 editChangePassword.setText("");
                 return true;
             }
@@ -116,7 +108,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 databaseReference.child("Reviews").child("From " + getUserLogin()).setValue(editAppReview.getText().toString());
-                showToast("Feedback has been sent");
+                showToast("Отзыв успешно отправлен");
                 editAppReview.setText("");
                 return true;
             }
@@ -126,7 +118,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 addPrivateReminder(editPrivateReminder.getText().toString() + "\n", Context.MODE_APPEND);
-                showToast("Added to private reminders");
+                showToast("Добавлено новое личное напоминание");
                 editPrivateReminder.setText("");
                 return true;
             }
@@ -144,7 +136,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 addPrivateReminder("", Context.MODE_PRIVATE);
-                showToast("List of private reminders was cleared");
+                showToast("Список личных напоминаний был очищен");
                 return true;
             }
         });
@@ -185,19 +177,19 @@ public class SettingsFragment extends Fragment {
             fileInputStream.read(bytes);
             String privateReminders = new String(bytes);
             AlertDialog alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme).create();
-            alertDialog.setTitle("Private reminders");
+            alertDialog.setTitle("Личные напоминания");
             alertDialog.setMessage(privateReminders);
             alertDialog.show();
         }
         catch (Exception e) {
-            showToast("Sorry, there was an error");
+            showToast("Произошла ошибка!");
         }
         finally {
             try {
                 if (fileInputStream != null) fileInputStream.close();
             }
             catch (Exception e) {
-                showToast("Sorry, there was an error");
+                showToast("Произошла ошибка!");
             }
         }
     }
@@ -209,14 +201,14 @@ public class SettingsFragment extends Fragment {
             fileOutputStream.write(reminderToAdd.getBytes());
         }
         catch (Exception e){
-            showToast("Sorry, there was an error");
+            showToast("Произошла ошибка!");
         }
         finally {
             try {
                 if (fileOutputStream!=null) fileOutputStream.close();
             }
             catch (Exception e){
-                showToast("Sorry, there was an error");
+                showToast("Произошла ошибка!");
             }
         }
     }

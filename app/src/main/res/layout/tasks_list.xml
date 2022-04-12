@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tasksList"
-    android:paddingStart="25dp"
-    android:paddingEnd="25dp"
-    android:paddingTop="10dp"
+    android:paddingHorizontal="30dp"
+    android:paddingVertical="20dp"
     android:layout_width="match_parent"
-    android:layout_height="180dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tlTaskName"
@@ -16,7 +15,7 @@
         android:paddingTop="10dp"
         android:text="Task name"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,55 +29,58 @@
         android:paddingTop="8dp"
         android:text="Task description"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textAlignment="center"
-        android:maxLength="29"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlTaskName" />
 
-    <TextView
-        android:id="@+id/tlTaskWorker"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="8dp"
-        android:text="Task worker"
-        android:textColor="@color/black"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tlTaskDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/tlTaskDescription"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/tlTaskExpDate"
-        android:layout_width="155dp"
-        android:layout_height="40dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="8dp"
-        android:text="Task exp date"
-        android:textColor="@color/grey"
-        android:textSize="16dp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tlTaskWorker" />
+        <TextView
+            android:id="@+id/tlTaskWorker"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingTop="8dp"
+            android:paddingHorizontal="15dp"
+            android:maxLength="11"
+            android:text="Task worker"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tlTaskExpTime"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="8dp"
-        android:text="Task exp time"
-        android:textStyle="italic"
-        android:textColor="@color/grey"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toEndOf="@+id/tlTaskExpDate"
-        app:layout_constraintTop_toBottomOf="@+id/tlTaskWorker" />
+        <TextView
+            android:id="@+id/tlTaskExpDate"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingTop="8dp"
+            android:text="Task exp date"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@id/tlTaskWorker"
+            app:layout_constraintEnd_toStartOf="@id/tlTaskExpTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tlTaskExpTime"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingTop="8dp"
+            android:paddingHorizontal="15dp"
+            android:text="Task exp time"
+            android:textStyle="italic"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

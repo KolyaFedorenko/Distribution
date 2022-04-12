@@ -102,12 +102,12 @@ public class AddTaskFragment extends Fragment {
         if (filled){
             editTaskName.setText(taskName);
             editTaskDescription.setText(taskDesc);
-            textExpirationDate.setText(taskExpDate.substring(6));
+            textExpirationDate.setText(taskExpDate.substring(3));
             textExpirationTime.setText(taskExpTime);
 
             editTaskName.setEnabled(false);
             buttonAddTask.setBackground(getActivity().getDrawable(R.drawable.rounded_secondary_action_item));
-            buttonAddTask.setText("Edit task");
+            buttonAddTask.setText("Редактировать задачу");
         }
         else{
             day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
@@ -138,7 +138,7 @@ public class AddTaskFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String worker = (String)parent.getItemAtPosition(position);
                 taskTo = worker;
-                showToast("Selected worker: " + worker);
+                showToast("Выбранный работник: " + worker);
             }
         };
         listTaskTo.setOnItemClickListener(itemClickListener);
@@ -180,11 +180,11 @@ public class AddTaskFragment extends Fragment {
                     Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
                     databaseReference.child(taskName).setValue(distribution);
                     if(!filled) editIssuedTasksCount();
-                    showToast("Successfully added");
+                    showToast("Успешно добавлено!");
                     fragmentCloseListener.onCloseAddTaskFragment();
                 }
                 else {
-                    showToast("One or more fields is empty");
+                    showToast("Необходимо заполнить все поля!");
                 }
             }
         });
