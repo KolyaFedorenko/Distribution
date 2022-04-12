@@ -37,6 +37,9 @@ public class EventsFragment extends Fragment {
     private ArrayList<Event> events;
     private EventAdapter adapter;
 
+    private static final String PREFS_FILE = "Account";
+    private static final String PREF_ROLE = "Worker";
+
     public EventsFragment() { }
 
     @Override
@@ -77,6 +80,8 @@ public class EventsFragment extends Fragment {
         getEvents();
         recyclerViewEvents.setAdapter(adapter);
 
+        if (!getUserRole().equals("Manager")) buttonAddNewEvent.setVisibility(View.INVISIBLE);
+
         buttonAddNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,5 +108,9 @@ public class EventsFragment extends Fragment {
             }
         };
         databaseReference.addValueEventListener(valueEventListener);
+    }
+
+    private String getUserRole(){
+        return getActivity().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE).getString(PREF_ROLE, "Worker");
     }
 }
