@@ -101,7 +101,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     @Override
     public void onAddNewTask() {
         addTaskFragment = new AddTaskFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, addTaskFragment, "addTaskFragment").hide(activeFragment).commit();
         activeFragment = addTaskFragment;
     }
 
@@ -113,14 +113,14 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     @Override
     public void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
         taskDetailsFragment = new TaskDetailtsFragment(taskName, taskDescription, taskExpDate, taskExpTime, taskWorker);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, taskDetailsFragment, "taskDetailsFragment").hide(activeFragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, taskDetailsFragment, "taskDetailsFragment").hide(activeFragment).commit();
         activeFragment = taskDetailsFragment;
     }
 
     @Override
     public void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime) {
         addTaskFragment = new AddTaskFragment(taskName, taskDescription, taskExpDate, taskExpTime);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, addTaskFragment, "addTaskFragment").remove(activeFragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, addTaskFragment, "addTaskFragment").remove(activeFragment).commit();
         activeFragment = addTaskFragment;
     }
 
@@ -163,7 +163,7 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     @Override
     public void onAddNewEvent() {
         addEventFragment = new AddEventFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, addEventFragment, "addEventFragment").hide(activeFragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, addEventFragment, "addEventFragment").hide(activeFragment).commit();
         activeFragment = addEventFragment;
     }
 
@@ -193,7 +193,15 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
     }
 
     private void replaceFragment(Fragment replaced, Fragment replacing){
-        getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
+        if (replacing.equals(taskListFragment) && !replaced.equals(trackingFragment)){
+            animatedReplaceFragment(replaced, replacing);
+        }
+        else if (replaced.equals(addEventFragment) && replacing.equals(eventsFragment)){
+            animatedReplaceFragment(replaced, replacing);
+        }
+        else {
+            getSupportFragmentManager().beginTransaction().remove(replaced).show(replacing).commit();
+        }
         activeFragment = replacing;
     }
 
@@ -231,5 +239,14 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
             getSupportFragmentManager().beginTransaction().remove(activeFragment).show(trackingFragment).commit();
         }
         activeFragment = trackingFragment;
+    }
+
+    private void animatedReplaceFragment(Fragment replaced, Fragment replacing){
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.empty_animation, R.anim.slide_left_to_right)
+                .remove(replaced)
+                .setCustomAnimations(R.anim.slide_left_to_right_first, R.anim.slide_left_to_right)
+                .show(replacing)
+                .commit();
     }
 }
