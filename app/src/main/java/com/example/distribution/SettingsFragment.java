@@ -29,6 +29,7 @@ public class SettingsFragment extends Fragment {
 
     public interface OnFragmentSignOut{
         void onSignOut();
+        void onShowInstruction();
     }
     private OnFragmentSignOut fragmentSignOut;
 
@@ -144,7 +145,7 @@ public class SettingsFragment extends Fragment {
         textAppInformation.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showToast("Version 1.1");
+                fragmentSignOut.onShowInstruction();
                 return true;
             }
         });
