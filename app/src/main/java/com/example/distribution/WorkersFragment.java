@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 public class WorkersFragment extends Fragment implements WorkerAdapter.WorkerAdapterInterface{
 
     private ListView listWorkers;
+    private ProgressBar progressBarWorkers;
+    private TextView workersListEmpty;
 
     private WorkerAdapter workerAdapter;
     private DatabaseReference databaseReference;
@@ -46,6 +49,9 @@ public class WorkersFragment extends Fragment implements WorkerAdapter.WorkerAda
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_workers, container, false);
+
+        progressBarWorkers = view.findViewById(R.id.progressBarWorkers);
+        workersListEmpty = view.findViewById(R.id.workersListEmpty);
 
         listWorkers = view.findViewById(R.id.listWorkers);
         workers = new ArrayList<>();
@@ -88,6 +94,9 @@ public class WorkersFragment extends Fragment implements WorkerAdapter.WorkerAda
                     workers.add(new User(user.getLogin(), user.getPassword(), user.getRole()));
                 }
                 workerAdapter.notifyDataSetChanged();
+                progressBarWorkers.setVisibility(View.GONE);
+                if (workers.size() == 0) workersListEmpty.setVisibility(View.VISIBLE);
+                else workersListEmpty.setVisibility(View.GONE);
             }
 
             @Override

@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,8 @@ public class EventsFragment extends Fragment {
 
     private Button buttonAddNewEvent;
     private RecyclerView recyclerViewEvents;
+    private ProgressBar progressBarEvents;
+    private TextView eventsListEmpty;
 
     private DatabaseReference databaseReference;
     private ArrayList<Event> events;
@@ -71,6 +75,8 @@ public class EventsFragment extends Fragment {
 
         buttonAddNewEvent = view.findViewById(R.id.buttonAddNewEvent);
         recyclerViewEvents = view.findViewById(R.id.recyclerViewEvents);
+        progressBarEvents = view.findViewById(R.id.progressBarEvents);
+        eventsListEmpty = view.findViewById(R.id.eventsListEmpty);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
         recyclerViewEvents.setLayoutManager(layoutManager);
@@ -100,6 +106,9 @@ public class EventsFragment extends Fragment {
                     events.add(new Event(event.getEventName(), event.getEventDescription(), event.getEventWorkers(), event.getEventDate()));
                 }
                 adapter.notifyDataSetChanged();
+                progressBarEvents.setVisibility(View.GONE);
+                if (events.size() == 0) eventsListEmpty.setVisibility(View.VISIBLE);
+                else eventsListEmpty.setVisibility(View.GONE);
             }
 
             @Override
