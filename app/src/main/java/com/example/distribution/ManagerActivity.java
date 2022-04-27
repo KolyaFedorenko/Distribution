@@ -165,9 +165,12 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     @Override
     public void onAddNewEvent() {
-        addEventFragment = new AddEventFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, addEventFragment, "addEventFragment").hide(activeFragment).commit();
-        activeFragment = addEventFragment;
+        addNewAddEventFragment(new AddEventFragment());
+    }
+
+    @Override
+    public void onEditEvent(Event event) {
+        addNewAddEventFragment(new AddEventFragment(event));
     }
 
     @Override
@@ -308,5 +311,11 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
         catch (Exception e){
             Toast.makeText(this, "К сожалению, данная возможность сейчас недоступна", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void addNewAddEventFragment(AddEventFragment addEventFragment){
+        this.addEventFragment = addEventFragment;
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, this.addEventFragment, "addEventFragment").hide(activeFragment).commit();
+        activeFragment = this.addEventFragment;
     }
 }

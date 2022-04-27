@@ -15,7 +15,7 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
     private final LayoutInflater inflater;
-    private final List<Event> events;
+    public final List<Event> events;
     private Context context;
 
     public EventAdapter(Context context, List<Event> events){
@@ -48,6 +48,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         else{
             holder.constraintLayoutEvents.setBackground(context.getDrawable(R.drawable.event_card_third));
         }
+    }
+
+    public Event getItemAtPosition(int position){
+        return events.get(position);
     }
 
     @Override

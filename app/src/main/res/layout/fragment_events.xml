@@ -8,13 +8,43 @@
     tools:context=".EventsFragment">
 
     <Button
-        android:id="@+id/buttonAddNewEvent"
+        android:id="@+id/buttonEditEvent"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/rounded_add_new_event"
-        android:text="@string/add"
-        android:textSize="20sp"
+        android:drawableStart="@drawable/ic_baseline_edit"
+        android:drawableTint="@color/black"
+        android:paddingStart="15dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/buttonAddNewEvent"
+        android:alpha="0"/>
+
+    <Button
+        android:id="@+id/buttonDeleteEvent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/rounded_delete_event"
+        android:drawableStart="@drawable/ic_baseline_delete"
+        android:drawableTint="@color/black"
+        android:paddingStart="13dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/buttonAddNewEvent"
+        android:alpha="0"/>
+
+    <Button
+        android:id="@+id/buttonAddNewEvent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/rounded_delete_event"
+        android:drawableStart="@drawable/ic_baseline_add"
+        android:drawableTint="@color/black"
+        android:paddingStart="16dp"
+        android:paddingEnd="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

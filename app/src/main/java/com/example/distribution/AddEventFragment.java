@@ -51,7 +51,18 @@ public class AddEventFragment extends Fragment {
 
     private final Calendar calendar = Calendar.getInstance();
 
+
+    private Event event;
+    private boolean filled = false;
+    private String[] workers;
+
     public AddEventFragment() { }
+
+    public AddEventFragment(Event event){
+        this.event = event;
+        workers = event.getEventWorkers().split(", ");
+        filled = true;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -87,6 +98,16 @@ public class AddEventFragment extends Fragment {
         chipGroupEventWorkers = view.findViewById(R.id.chipGroupEventWorkers);
         buttonAddEvent = view.findViewById(R.id.buttonAddEvent);
 
+        if (filled){
+            editEventName.setEnabled(false);
+            editEventName.setText(event.getEventName());
+            editEventDescription.setText(event.getEventDescription());
+            textEventDate.setText(event.getEventDate());
+            for (String s : workers) {
+                addChip(s);
+            }
+        }
+
         users = new ArrayList<>();
         adapter = new UserAdapter(getActivity(), R.layout.users_list, users);
         getUsers();
@@ -95,24 +116,7 @@ public class AddEventFragment extends Fragment {
         AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    String worker = (String)parent.getItemAtPosition(position);
-                    LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, chipGroupEventWorkers, false);
-                    chip.setText(worker);
-                    chip.setTextIsSelectable(false);
-                    chipGroupEventWorkers.addView(chip);
-
-                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            handleChipCloseIconClicked((Chip) v);
-                        }
-                    });
-                }
-                catch (Exception e){
-                    Toast.makeText(getActivity(), "Произошла ошибка", Toast.LENGTH_SHORT).show();
-                }
+                addChip((String)parent.getItemAtPosition(position));
             }
         };
         listEventWorkers.setOnItemClickListener(itemClickListener);
@@ -196,5 +200,25 @@ public class AddEventFragment extends Fragment {
         if (dayToFormat.length() == 1) formatDay = "0" + dayToFormat;
         if (monthToFormat.length() == 1) formatMonth = "0" + monthToFormat;
         return formatDay + "." + formatMonth + "." + year;
+    }
+
+    private void addChip(String chipText){
+        try{
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, chipGroupEventWorkers, false);
+            chip.setText(chipText);
+            chip.setTextIsSelectable(false);
+            chipGroupEventWorkers.addView(chip);
+
+            chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleChipCloseIconClicked((Chip) v);
+                }
+            });
+        }
+        catch (Exception e) {
+            Toast.makeText(getActivity(), "Произошла ошибка", Toast.LENGTH_SHORT).show();
+        }
     }
 }
