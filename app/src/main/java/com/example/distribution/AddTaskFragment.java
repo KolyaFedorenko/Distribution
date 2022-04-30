@@ -62,11 +62,12 @@ public class AddTaskFragment extends Fragment {
 
     public AddTaskFragment() { }
 
-    public AddTaskFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime){
-        this.taskName = taskName;
-        this.taskDesc = taskDescription;
-        this.taskExpDate = taskExpDate;
-        this.taskExpTime = taskExpTime;
+    public AddTaskFragment(Distribution distribution){
+        taskName = distribution.getTaskName();
+        taskDesc = distribution.getTaskDescription();
+        taskExpDate = distribution.getTaskExpirationDate();
+        taskExpTime = distribution.getTaskExpirationTime();
+        taskTo = distribution.getTaskWorker().substring(5);
         filled = true;
     }
 

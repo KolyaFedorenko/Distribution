@@ -31,7 +31,7 @@ public class TaskListFragment extends Fragment {
 
     public interface OnFragmentSendDataListener{
         void onAddNewTask();
-        void onSendTaskDetails(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker);
+        void onSendTaskDetails(Distribution distribution);
     }
 
     private OnFragmentSendDataListener fragmentSendDataListener;
@@ -98,7 +98,7 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Distribution distribution = (Distribution)parent.getItemAtPosition(position);
-                fragmentSendDataListener.onSendTaskDetails(distribution.getTaskName(), distribution.getTaskDescription(), distribution.getTaskExpirationDate(), distribution.getTaskExpirationTime(), distribution.getTaskWorker());
+                fragmentSendDataListener.onSendTaskDetails(distribution);
             }
         };
         listTasks.setOnItemClickListener(itemClickListener);

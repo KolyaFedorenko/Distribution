@@ -24,13 +24,13 @@ import com.google.firebase.database.Transaction;
 public class TaskDetailtsFragment extends Fragment {
 
     public interface OnFragmentSendDetailsToEdit{
-        void onSendDetailsToEdit(String taskName, String taskDescription, String taskExpDate, String taskExpTime);
+        void onSendDetailsToEdit(Distribution distribution);
         void onCloseTaskDetailsFragment();
     }
 
     private OnFragmentSendDetailsToEdit fragmentSendDetailsToEdit;
 
-    private String taskName, taskDescription, taskExpDate, taskExpTime, taskWorker;
+    private Distribution distribution;
     private TextView textTaskName, textTaskDescription, textTaskExpDate, textTaskExpTime, textTaskWorker;
     private Button buttonTaskSeen, buttonTaskCompleted, buttonEditTask, buttonCloseTask;
 
@@ -41,12 +41,8 @@ public class TaskDetailtsFragment extends Fragment {
     private DatabaseReference databaseReference, databaseReferenceTracking;
     private String DISTRIBUTION_KEY = "Distribution", TRACKING_KEY = "TaskTracking";
 
-    public TaskDetailtsFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime, String taskWorker) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.taskExpDate = taskExpDate;
-        this.taskExpTime = taskExpTime;
-        this.taskWorker = taskWorker;
+    public TaskDetailtsFragment(Distribution distribution) {
+        this.distribution = distribution;
     }
 
     @Override
@@ -77,11 +73,11 @@ public class TaskDetailtsFragment extends Fragment {
         textTaskExpTime = view.findViewById(R.id.textTaskExpTime);
         textTaskWorker = view.findViewById(R.id.textTaskWorker);
 
-        textTaskName.setText(taskName);
-        textTaskDescription.setText(taskDescription);
-        textTaskExpDate.setText(taskExpDate.substring(3));
-        textTaskExpTime.setText(taskExpTime);
-        textTaskWorker.setText(taskWorker);
+        textTaskName.setText(distribution.getTaskName());
+        textTaskDescription.setText(distribution.getTaskDescription());
+        textTaskExpDate.setText(distribution.getTaskExpirationDate().substring(3));
+        textTaskExpTime.setText(distribution.getTaskExpirationTime());
+        textTaskWorker.setText(distribution.getTaskWorker());
 
         return view;
     }
@@ -108,7 +104,7 @@ public class TaskDetailtsFragment extends Fragment {
         buttonEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentSendDetailsToEdit.onSendDetailsToEdit(taskName, taskDescription, taskExpDate, taskExpTime);
+                fragmentSendDetailsToEdit.onSendDetailsToEdit(distribution);
             }
         });
 
@@ -143,7 +139,7 @@ public class TaskDetailtsFragment extends Fragment {
     }
 
     private void removeTask(String toastToShow){
-        databaseReference.child(taskName).removeValue();
+        databaseReference.child(distribution.getTaskName()).removeValue();
         showToast(toastToShow);
         fragmentSendDetailsToEdit.onCloseTaskDetailsFragment();
     }
