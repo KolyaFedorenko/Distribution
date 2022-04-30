@@ -37,4 +37,6 @@
     <string name="add_event">Добавить событие</string>
     <string name="event_date">Дата события</string>
     <string name="event_worker">Работники</string>
+    <string name="events_list_empty">Список событий пуст</string>
+    <string name="workers_list_empty">Список пользователей пуст</string>
 </resources>

@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -162,14 +165,23 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
 
     @Override
     public void onAddNewEvent() {
-        addEventFragment = new AddEventFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, addEventFragment, "addEventFragment").hide(activeFragment).commit();
-        activeFragment = addEventFragment;
+        addNewAddEventFragment(new AddEventFragment());
+    }
+
+    @Override
+    public void onEditEvent(Event event) {
+        addNewAddEventFragment(new AddEventFragment(event));
     }
 
     @Override
     public void onCloseAddEventFragment() {
         replaceFragment(addEventFragment, eventsFragment);
+    }
+
+    @Override
+    public void onShowInstruction() {
+        showTNWS(taskListFragment);
+        showInstruction();
     }
 
     private void getStatistic(){
@@ -248,5 +260,62 @@ public class ManagerActivity extends AppCompatActivity implements TaskListFragme
                 .setCustomAnimations(R.anim.slide_left_to_right_first, R.anim.slide_left_to_right)
                 .show(replacing)
                 .commit();
+    }
+
+    private void showInstruction(){
+        try {
+            new TapTargetSequence(this)
+                    .targets(
+                            TapTarget.forView(findViewById(R.id.taskList), "Список задач", "В этой вкладке отображается список невыполненных задач").cancelable(false).outerCircleAlpha(0.8f),
+                            TapTarget.forView(findViewById(R.id.buttonAddNewTask), "Добавление задачи", "Для добавления задачи можно нажать на эту кнопку").cancelable(false).tintTarget(false).outerCircleAlpha(0.8f).id(1),
+                            TapTarget.forView(findViewById(R.id.taskTracking), "Отслеживание", "Если вы являетесь руководителем, здесь можно посмотреть информацию по количеству выданных/просмотренных/выполненных задач").cancelable(false).outerCircleAlpha(0.8f).id(2),
+                            TapTarget.forView(findViewById(R.id.events), "События", "В этом разделе отображается список предстоящих событий").cancelable(false).outerCircleAlpha(0.8f),
+                            TapTarget.forView(findViewById(R.id.buttonAddNewEvent), "Добавление события", "Для добавления события можно нажать на эту кнопку").cancelable(false).tintTarget(false).outerCircleAlpha(0.8f).id(3),
+                            TapTarget.forView(findViewById(R.id.users), "Пользователи", "Здесь отображается список всех пользователей приложения").cancelable(false).outerCircleAlpha(0.8f).id(4),
+                            TapTarget.forView(findViewById(R.id.settings), "Настройки", "В этом разделе расположен список настроек приложения").cancelable(false).outerCircleAlpha(0.8f),
+                            TapTarget.forView(findViewById(R.id.editChangePassword), "Смена пароля", "Для смены пароля введите в это поле новый пароль и совершите длительное нажатие").cancelable(false).outerCircleAlpha(1f).targetRadius(70),
+                            TapTarget.forView(findViewById(R.id.editPrivateReminder), "Создание личного напоминания", "Для добавления нового личного напоминания введите в это поле текст напоминания и совершите длительное нажатие").cancelable(false).outerCircleAlpha(1f).targetRadius(120),
+                            TapTarget.forView(findViewById(R.id.textCheckPrivateReminders), "Просмотр списка напоминаний", "Для просмотра списка личных напоминаний совершите длительное нажатие на этот пункт настроек").cancelable(false).outerCircleAlpha(1f).targetRadius(110),
+                            TapTarget.forView(findViewById(R.id.textClearPrivateReminders), "Очистка списка напоминаний", "Для очистки списка личных напоминаний совершите длительное нажатие на этот пункт настроек").cancelable(false).outerCircleAlpha(1f).targetRadius(120),
+                            TapTarget.forView(findViewById(R.id.editAppReview), "Отзыв о приложении", "Чтобы добавить отзыв, введите в это поле его текст и совершите длительное нажатие").cancelable(false).outerCircleAlpha(1f).targetRadius(90),
+                            TapTarget.forView(findViewById(R.id.textAppInformation), "Как использовать приложение?", "Чтобы узнать, как использовать приложение, совершите длительное нажатие на этот пункт настроек").cancelable(false).outerCircleAlpha(1f).targetRadius(110),
+                            TapTarget.forView(findViewById(R.id.buttonSignOut), "Выход из аккаунта", "Чтобы выйти из аккаунта, нажмите на эту кнопку").cancelable(false).tintTarget(false).outerCircleAlpha(0.8f).targetRadius(60))
+                    .listener(new TapTargetSequence.Listener() {
+                        @Override
+                        public void onSequenceFinish() {
+                        }
+
+                        @Override
+                        public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+                            switch (lastTarget.id()) {
+                                case 1:
+                                    if (bottomNavigationView.getMenu().findItem(R.id.taskTracking).isEnabled()) showTaskTracking();
+                                    break;
+                                case 2:
+                                    showTNWS(eventsFragment);
+                                    break;
+                                case 3:
+                                    showTNWS(workersFragment);
+                                    break;
+                                case 4:
+                                    showTNWS(settingsFragment);
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onSequenceCanceled(TapTarget lastTarget) {
+                        }
+                    }).start();
+        }
+        catch (Exception e){
+            Toast.makeText(this, "К сожалению, данная возможность сейчас недоступна", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addNewAddEventFragment(AddEventFragment addEventFragment){
+        this.addEventFragment = addEventFragment;
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_right_to_left_first, R.anim.slide_right_to_left).add(R.id.container, this.addEventFragment, "addEventFragment").hide(activeFragment).commit();
+        activeFragment = this.addEventFragment;
     }
 }
