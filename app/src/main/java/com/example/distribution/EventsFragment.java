@@ -8,7 +8,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +94,10 @@ public class EventsFragment extends Fragment {
         adapter = new EventAdapter(getActivity(), events);
         getEvents();
         recyclerViewEvents.setAdapter(adapter);
+
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerViewEvents);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerViewEvents);
 
         if (!getUserRole().equals("Manager")) buttonAddNewEvent.setVisibility(View.INVISIBLE);
 
