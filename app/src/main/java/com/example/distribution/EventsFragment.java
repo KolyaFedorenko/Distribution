@@ -99,7 +99,11 @@ public class EventsFragment extends Fragment {
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerViewEvents);
 
-        if (!getUserRole().equals("Manager")) buttonAddNewEvent.setVisibility(View.INVISIBLE);
+        if (!getUserRole().equals("Manager")){
+            buttonAddNewEvent.setVisibility(View.INVISIBLE);
+            buttonEditEvent.setVisibility(View.INVISIBLE);
+            buttonDeleteEvent.setVisibility(View.INVISIBLE);
+        }
 
         buttonAddNewEvent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

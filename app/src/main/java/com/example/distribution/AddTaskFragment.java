@@ -178,11 +178,16 @@ public class AddTaskFragment extends Fragment {
                 taskExpDate = textExpirationDate.getText().toString();
                 taskExpTime = textExpirationTime.getText().toString();
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals("") || taskTo == null)) {
-                    Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
-                    databaseReference.child(taskName).setValue(distribution);
-                    if(!filled) editIssuedTasksCount();
-                    showToast("Успешно добавлено!");
-                    fragmentCloseListener.onCloseAddTaskFragment();
+                    if (taskName.matches("^[a-zA-Z0-9]+$")) {
+                        Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
+                        databaseReference.child(taskName).setValue(distribution);
+                        if (!filled) editIssuedTasksCount();
+                        showToast("Успешно добавлено!");
+                        fragmentCloseListener.onCloseAddTaskFragment();
+                    }
+                    else{
+                        showToast("Имя задачи содержит недопустимые символы!");
+                    }
                 }
                 else {
                     showToast("Необходимо заполнить все поля!");
