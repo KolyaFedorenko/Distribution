@@ -146,7 +146,7 @@ public class AddEventFragment extends Fragment {
                     String eventDate = textEventDate.getText().toString();
                     String eventWorkers = getSelectedWorkers();
                     if (!eventName.equals("") && !eventDescription.equals("") && !eventWorkers.equals("") && !eventDate.equals("Дата события")) {
-                        if (eventName.matches("^[a-zA-Z0-9]+$")) {
+                        if (eventName.matches("^[a-zA-Zа-яА-Я0-9\\s]+$")) {
                             Event event = new Event(eventName, eventDescription, eventWorkers, eventDate);
                             databaseReference.child("Events").child(eventName).setValue(event);
                             addEventFragmentInterface.onCloseAddEventFragment();

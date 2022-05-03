@@ -178,7 +178,7 @@ public class AddTaskFragment extends Fragment {
                 taskExpDate = textExpirationDate.getText().toString();
                 taskExpTime = textExpirationTime.getText().toString();
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals("") || taskTo == null)) {
-                    if (taskName.matches("^[a-zA-Z0-9]+$")) {
+                    if (taskName.matches("^[a-zA-Zа-яА-Я0-9\\s]+$")) {
                         Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
                         databaseReference.child(taskName).setValue(distribution);
                         if (!filled) editIssuedTasksCount();

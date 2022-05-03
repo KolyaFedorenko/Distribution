@@ -120,11 +120,16 @@ public class AuthorizationFragment extends Fragment {
                 getLoginAndPassword();
                 if (!login.equals("") && !password.equals("")) {
                     if (!userExist) {
-                        try {password = passwordHasher.generatePasswordHash(password); }
-                        catch (Exception ignored) {}
-                        User user = new User(login, password, "Worker");
-                        databaseReference.child(login).setValue(user);
-                        showToast("Вы были зарегистрированы!");
+                        if (login.matches("^[a-zA-Zа-яА-Я0-9\\s]+$")) {
+                            try {
+                                password = passwordHasher.generatePasswordHash(password);
+                            } catch (Exception ignored) { }
+                            User user = new User(login, password, "Worker");
+                            databaseReference.child(login).setValue(user);
+                            showToast("Вы были зарегистрированы!");
+                        } else {
+                            showToast("Логин содержит недопустимые символы!");
+                        }
                     }
                     else{
                         showToast("Пользователь с таким именем уже зарегистрирован");
