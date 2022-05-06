@@ -62,11 +62,12 @@ public class AddTaskFragment extends Fragment {
 
     public AddTaskFragment() { }
 
-    public AddTaskFragment(String taskName, String taskDescription, String taskExpDate, String taskExpTime){
-        this.taskName = taskName;
-        this.taskDesc = taskDescription;
-        this.taskExpDate = taskExpDate;
-        this.taskExpTime = taskExpTime;
+    public AddTaskFragment(Distribution distribution){
+        taskName = distribution.getTaskName();
+        taskDesc = distribution.getTaskDescription();
+        taskExpDate = distribution.getTaskExpirationDate();
+        taskExpTime = distribution.getTaskExpirationTime();
+        taskTo = distribution.getTaskWorker().substring(5);
         filled = true;
     }
 
@@ -177,11 +178,16 @@ public class AddTaskFragment extends Fragment {
                 taskExpDate = textExpirationDate.getText().toString();
                 taskExpTime = textExpirationTime.getText().toString();
                 if (!(taskName.equals("") || taskDesc.equals("") || taskExpDate.equals("") || taskExpTime.equals("") || taskTo == null)) {
-                    Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
-                    databaseReference.child(taskName).setValue(distribution);
-                    if(!filled) editIssuedTasksCount();
-                    showToast("Успешно добавлено!");
-                    fragmentCloseListener.onCloseAddTaskFragment();
+                    if (taskName.matches("^[a-zA-Zа-яА-Я0-9\\s]+$")) {
+                        Distribution distribution = new Distribution(taskName, taskDesc, taskExpDate, taskExpTime, taskTo);
+                        databaseReference.child(taskName).setValue(distribution);
+                        if (!filled) editIssuedTasksCount();
+                        showToast("Успешно добавлено!");
+                        fragmentCloseListener.onCloseAddTaskFragment();
+                    }
+                    else{
+                        showToast("Имя задачи содержит недопустимые символы!");
+                    }
                 }
                 else {
                     showToast("Необходимо заполнить все поля!");

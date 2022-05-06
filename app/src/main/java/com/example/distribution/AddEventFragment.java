@@ -99,6 +99,8 @@ public class AddEventFragment extends Fragment {
         buttonAddEvent = view.findViewById(R.id.buttonAddEvent);
 
         if (filled){
+            buttonAddEvent.setBackground(getActivity().getDrawable(R.drawable.rounded_secondary_action_item));
+            buttonAddEvent.setText("Редактировать событие");
             editEventName.setEnabled(false);
             editEventName.setText(event.getEventName());
             editEventDescription.setText(event.getEventDescription());
@@ -144,9 +146,13 @@ public class AddEventFragment extends Fragment {
                     String eventDate = textEventDate.getText().toString();
                     String eventWorkers = getSelectedWorkers();
                     if (!eventName.equals("") && !eventDescription.equals("") && !eventWorkers.equals("") && !eventDate.equals("Дата события")) {
-                        Event event = new Event(eventName, eventDescription, eventWorkers, eventDate);
-                        databaseReference.child("Events").child(eventName).setValue(event);
-                        addEventFragmentInterface.onCloseAddEventFragment();
+                        if (eventName.matches("^[a-zA-Zа-яА-Я0-9\\s]+$")) {
+                            Event event = new Event(eventName, eventDescription, eventWorkers, eventDate);
+                            databaseReference.child("Events").child(eventName).setValue(event);
+                            addEventFragmentInterface.onCloseAddEventFragment();
+                        } else {
+                            Toast.makeText(getActivity(), "Имя события содержит недопустимые символы!", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(getActivity(), "Необходимо заполнить все поля!", Toast.LENGTH_SHORT).show();
                     }
